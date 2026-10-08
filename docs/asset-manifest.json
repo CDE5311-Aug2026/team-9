@@ -1,0 +1,412 @@
+[
+  {
+    "page": "collection",
+    "name": "imgSpeciesArtwork",
+    "file": "collection-species-artwork.png"
+  },
+  {
+    "page": "collection",
+    "name": "imgSpeciesArtwork1",
+    "file": "collection-species-artwork1.png"
+  },
+  {
+    "page": "collection",
+    "name": "imgSpeciesArtwork2",
+    "file": "collection-species-artwork2.png"
+  },
+  {
+    "page": "collection",
+    "name": "imgSpeciesArtwork3",
+    "file": "collection-species-artwork3.png"
+  },
+  {
+    "page": "collection",
+    "name": "imgIosSignal",
+    "file": "collection-ios-signal.svg"
+  },
+  {
+    "page": "collection",
+    "name": "imgIosWifiSignal",
+    "file": "collection-ios-wifi-signal.svg"
+  },
+  {
+    "page": "collection",
+    "name": "imgIosBatteryFull",
+    "file": "collection-ios-battery-full.svg"
+  },
+  {
+    "page": "collection",
+    "name": "imgSearch",
+    "file": "collection-search.svg"
+  },
+  {
+    "page": "collection",
+    "name": "imgBookOpen",
+    "file": "collection-book-open.svg"
+  },
+  {
+    "page": "collection",
+    "name": "imgPlus",
+    "file": "collection-plus.svg"
+  },
+  {
+    "page": "collection",
+    "name": "imgBookOpen1",
+    "file": "collection-book-open1.svg"
+  },
+  {
+    "page": "explore",
+    "name": "imgPhotograph",
+    "file": "explore-photograph.png"
+  },
+  {
+    "page": "explore",
+    "name": "imgPhotograph1",
+    "file": "explore-photograph1.png"
+  },
+  {
+    "page": "explore",
+    "name": "imgPhotograph2",
+    "file": "explore-photograph2.png"
+  },
+  {
+    "page": "explore",
+    "name": "imgPhotograph3",
+    "file": "explore-photograph3.png"
+  },
+  {
+    "page": "explore",
+    "name": "imgIosSignal",
+    "file": "explore-ios-signal.svg"
+  },
+  {
+    "page": "explore",
+    "name": "imgIosWifiSignal",
+    "file": "explore-ios-wifi-signal.svg"
+  },
+  {
+    "page": "explore",
+    "name": "imgIosBatteryFull",
+    "file": "explore-ios-battery-full.svg"
+  },
+  {
+    "page": "explore",
+    "name": "imgMapPin",
+    "file": "explore-map-pin.svg"
+  },
+  {
+    "page": "explore",
+    "name": "imgChevronDown",
+    "file": "explore-chevron-down.svg"
+  },
+  {
+    "page": "explore",
+    "name": "imgCheck",
+    "file": "explore-check.svg"
+  },
+  {
+    "page": "explore",
+    "name": "imgTrash2",
+    "file": "explore-trash2.svg"
+  },
+  {
+    "page": "explore",
+    "name": "imgBookOpen",
+    "file": "explore-book-open.svg"
+  },
+  {
+    "page": "explore",
+    "name": "imgPlus",
+    "file": "explore-plus.svg"
+  },
+  {
+    "page": "explore",
+    "name": "imgBookOpen1",
+    "file": "explore-book-open1.svg"
+  },
+  {
+    "page": "species",
+    "name": "imgCyanotypeSpecimen",
+    "file": "species-cyanotype-specimen.png"
+  },
+  {
+    "page": "species",
+    "name": "imgOriginalUnderwaterPhotograph",
+    "file": "species-original-underwater-photograph.png"
+  },
+  {
+    "page": "species",
+    "name": "imgIosSignal",
+    "file": "species-ios-signal.svg"
+  },
+  {
+    "page": "species",
+    "name": "imgIosWifiSignal",
+    "file": "species-ios-wifi-signal.svg"
+  },
+  {
+    "page": "species",
+    "name": "imgIosBatteryFull",
+    "file": "species-ios-battery-full.svg"
+  },
+  {
+    "page": "species",
+    "name": "imgArrowLeft",
+    "file": "species-arrow-left.svg"
+  },
+  {
+    "page": "species",
+    "name": "imgChevronRight",
+    "file": "species-chevron-right.svg"
+  },
+  {
+    "page": "species",
+    "name": "imgPlus",
+    "file": "species-plus.svg"
+  },
+  {
+    "page": "area",
+    "name": "imgPhotograph",
+    "file": "area-photograph.png"
+  },
+  {
+    "page": "area",
+    "name": "imgPhotograph1",
+    "file": "area-photograph1.png"
+  },
+  {
+    "page": "area",
+    "name": "imgPhotograph2",
+    "file": "area-photograph2.png"
+  },
+  {
+    "page": "area",
+    "name": "imgIosSignal",
+    "file": "area-ios-signal.svg"
+  },
+  {
+    "page": "area",
+    "name": "imgIosWifiSignal",
+    "file": "area-ios-wifi-signal.svg"
+  },
+  {
+    "page": "area",
+    "name": "imgIosBatteryFull",
+    "file": "area-ios-battery-full.svg"
+  },
+  {
+    "page": "area",
+    "name": "imgMapPin",
+    "file": "area-map-pin.svg"
+  },
+  {
+    "page": "area",
+    "name": "imgChevronDown",
+    "file": "area-chevron-down.svg"
+  },
+  {
+    "page": "area",
+    "name": "imgCheck",
+    "file": "area-check.svg"
+  },
+  {
+    "page": "area",
+    "name": "imgX",
+    "file": "area-x.svg"
+  },
+  {
+    "page": "area",
+    "name": "imgLocateFixed",
+    "file": "area-locate-fixed.svg"
+  },
+  {
+    "page": "area",
+    "name": "imgSearch",
+    "file": "area-search.svg"
+  },
+  {
+    "page": "area",
+    "name": "imgMapPin1",
+    "file": "area-map-pin1.svg"
+  },
+  {
+    "page": "area",
+    "name": "imgCheck1",
+    "file": "area-check1.svg"
+  },
+  {
+    "page": "area",
+    "name": "imgMapPin2",
+    "file": "area-map-pin2.svg"
+  },
+  {
+    "page": "palau",
+    "name": "imgPhotograph",
+    "file": "palau-photograph.png"
+  },
+  {
+    "page": "palau",
+    "name": "imgPhotograph1",
+    "file": "palau-photograph1.png"
+  },
+  {
+    "page": "palau",
+    "name": "imgPhotograph2",
+    "file": "palau-photograph2.png"
+  },
+  {
+    "page": "palau",
+    "name": "imgIosSignal",
+    "file": "palau-ios-signal.svg"
+  },
+  {
+    "page": "palau",
+    "name": "imgIosWifiSignal",
+    "file": "palau-ios-wifi-signal.svg"
+  },
+  {
+    "page": "palau",
+    "name": "imgIosBatteryFull",
+    "file": "palau-ios-battery-full.svg"
+  },
+  {
+    "page": "palau",
+    "name": "imgMapPin",
+    "file": "palau-map-pin.svg"
+  },
+  {
+    "page": "palau",
+    "name": "imgChevronDown",
+    "file": "palau-chevron-down.svg"
+  },
+  {
+    "page": "palau",
+    "name": "imgCheck",
+    "file": "palau-check.svg"
+  },
+  {
+    "page": "palau",
+    "name": "imgCalendarDays",
+    "file": "palau-calendar-days.svg"
+  },
+  {
+    "page": "palau",
+    "name": "imgBookOpen",
+    "file": "palau-book-open.svg"
+  },
+  {
+    "page": "palau",
+    "name": "imgPlus",
+    "file": "palau-plus.svg"
+  },
+  {
+    "page": "palau",
+    "name": "imgBookOpen1",
+    "file": "palau-book-open1.svg"
+  },
+  {
+    "page": "turtle",
+    "name": "imgUnderwaterPhotograph",
+    "file": "turtle-underwater-photograph.png"
+  },
+  {
+    "page": "turtle",
+    "name": "imgIosSignal",
+    "file": "turtle-ios-signal.svg"
+  },
+  {
+    "page": "turtle",
+    "name": "imgIosWifiSignal",
+    "file": "turtle-ios-wifi-signal.svg"
+  },
+  {
+    "page": "turtle",
+    "name": "imgIosBatteryFull",
+    "file": "turtle-ios-battery-full.svg"
+  },
+  {
+    "page": "turtle",
+    "name": "imgArrowLeft",
+    "file": "turtle-arrow-left.svg"
+  },
+  {
+    "page": "turtle",
+    "name": "imgShield",
+    "file": "turtle-shield.svg"
+  },
+  {
+    "page": "turtle",
+    "name": "imgEye",
+    "file": "turtle-eye.svg"
+  },
+  {
+    "page": "turtle",
+    "name": "imgCircleX",
+    "file": "turtle-circle-x.svg"
+  },
+  {
+    "page": "turtle",
+    "name": "imgHand",
+    "file": "turtle-hand.svg"
+  },
+  {
+    "page": "turtle",
+    "name": "imgArrowUp",
+    "file": "turtle-arrow-up.svg"
+  },
+  {
+    "page": "note",
+    "name": "imgUnderwaterPhotograph",
+    "file": "note-underwater-photograph.png"
+  },
+  {
+    "page": "note",
+    "name": "imgIosSignal",
+    "file": "note-ios-signal.svg"
+  },
+  {
+    "page": "note",
+    "name": "imgIosWifiSignal",
+    "file": "note-ios-wifi-signal.svg"
+  },
+  {
+    "page": "note",
+    "name": "imgIosBatteryFull",
+    "file": "note-ios-battery-full.svg"
+  },
+  {
+    "page": "note",
+    "name": "imgArrowLeft",
+    "file": "note-arrow-left.svg"
+  },
+  {
+    "page": "note",
+    "name": "imgShapes",
+    "file": "note-shapes.svg"
+  },
+  {
+    "page": "note",
+    "name": "imgEye",
+    "file": "note-eye.svg"
+  },
+  {
+    "page": "note",
+    "name": "imgLayers",
+    "file": "note-layers.svg"
+  },
+  {
+    "page": "note",
+    "name": "imgCamera",
+    "file": "note-camera.svg"
+  },
+  {
+    "page": "note",
+    "name": "imgHand",
+    "file": "note-hand.svg"
+  },
+  {
+    "page": "note",
+    "name": "imgMinusCircle",
+    "file": "note-minus-circle.svg"
+  }
+]
