@@ -2,7 +2,7 @@
 
 DiveDex — React, TypeScript and Vite implementation of the Figma marine-life collection and exploration designs.
 
-divedex-vibe-coding.vercel.app
+[divedex-vibe-coding.vercel.app](https://divedex-vibe-coding.vercel.app/#/collection)
 
 A responsive React + TypeScript + Vite implementation of the DiveDex Figma designs. Built with reusable components, plain CSS, and locally stored original Figma artwork, photography, SVG icons, and Inter fonts.
 
