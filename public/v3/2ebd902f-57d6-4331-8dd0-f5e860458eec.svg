@@ -1,0 +1,9 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="36" height="38" viewBox="0 0 36 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Frame" opacity="0.35">
+<path id="Vector" d="M8 12H27C30.3137 12 33 14.6863 33 18V24C33 27.3137 30.3137 30 27 30H8C4.68629 30 2 27.3137 2 24V18C2 14.6863 4.68629 12 8 12Z" stroke-width="3" stroke="#151719"/>
+<g id="Vector_2">
+<path d="M18 12V26ZM8 16L12 20Z" fill="black"/>
+<path d="M18 12V26M8 16L12 20" stroke-width="2" stroke="#151719"/>
+</g>
+</g>
+</svg>

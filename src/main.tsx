@@ -8,7 +8,8 @@ import '@fontsource/inter/latin-600.css';
 import '@fontsource/inter/latin-700.css';
 import { App } from './App';
 import { V2App } from './v2/App';
-function Root(){const {pathname}=useLocation();return pathname.startsWith('/v2')||pathname==='/'?<V2App/>:<App/>;}
+import { V3App } from './v3/App';
+function Root(){const {pathname}=useLocation();return pathname.startsWith('/v3')||pathname==='/'?<V3App/>:pathname.startsWith('/v2')?<V2App/>:<App/>;}
 import './styles.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

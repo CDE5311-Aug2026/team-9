@@ -67,3 +67,19 @@ The unusual tiny text sizes returned for two Figma component instances (observat
 - `docs/verification.md` — browser checks and known boundaries.
 
 Design content and artwork come from the supplied Figma file. No additional license is assumed.
+
+## V3 · Little Ocean (current default)
+
+The root route and `/#/v3/home` open the latest V3 prototype. V1 and V2 routes remain available.
+
+- Home: photo-stack carousel, observation links, Planning / At the spot / After a dive recommendations.
+- Collection: expandable categories, search, map and timeline views, species details and observations.
+- Identify: sample photo/video selection, simulated analysis, selectable result grid, expanded identification review, alternative matches, saving and quiz.
+- Explore: geographic basemap, Wildlife / Activities filters, area selection, species guides and sample study contribution flow.
+- Profile: statistics, progress, achievement badges and settings; guest onboarding and sign-in demonstration remain available at `/#/v3/welcome`.
+
+Source: Figma page **UI Design V3 · Little Ocean** (`417:336`), with **Home · Main / Polaroids** (`509:3559`) as the main homepage. Core reference frames include `427:2893`, `427:2817`, `427:2427`, `427:1482`, `457:2210` and `427:2847`.
+
+V3 uses Manrope, Instrument Serif and Caveat, with locally bundled Figma assets in `public/v3/`. Its mobile layout scrolls within the screen beneath the status bar, with fixed bottom navigation. Desktop displays the same centered phone prototype; narrow screens adapt card widths.
+
+This remains a clickable frontend prototype. Identification uses sample results, maps use static basemaps and illustrative pins, and accounts/contributions do not contact a backend. Saved species and preferences persist only in this browser’s local storage under the separate `divedex.v3` namespace. Displayed aggregate statistics and badges follow the Figma sample content.
