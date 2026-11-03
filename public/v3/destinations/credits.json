@@ -1,0 +1,38 @@
+[
+  {
+    "key": "amed-coast",
+    "file": "amed-coast.jpg",
+    "title": "Amed beach.jpg",
+    "author": "Ch cat",
+    "source": "https://commons.wikimedia.org/wiki/File:Amed_beach.jpg",
+    "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2d/Amed_beach.jpg/1280px-Amed_beach.jpg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail"
+  },
+  {
+    "key": "jemeluk-sunset",
+    "file": "jemeluk-sunset.jpg",
+    "title": "Sunset Sonata - Flickr - ^riza.jpg",
+    "author": "Riza Nugraha",
+    "source": "https://commons.wikimedia.org/wiki/File:Sunset_Sonata_-_Flickr_-_%5Eriza.jpg",
+    "license": "https://creativecommons.org/licenses/by/2.0/",
+    "download": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Sunset_Sonata_-_Flickr_-_%5Eriza.jpg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original"
+  },
+  {
+    "key": "raja-islands",
+    "file": "raja-islands.jpg",
+    "title": "Pianemo-Raja Ampat.jpg",
+    "author": "Yurianto76",
+    "source": "https://commons.wikimedia.org/wiki/File:Pianemo-Raja_Ampat.jpg",
+    "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/Pianemo-Raja_Ampat.jpg/1280px-Pianemo-Raja_Ampat.jpg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail"
+  },
+  {
+    "key": "raja-lagoon",
+    "file": "raja-lagoon.jpg",
+    "title": "Piaynemo Raja Ampat.jpg",
+    "author": "Rolandandika",
+    "source": "https://commons.wikimedia.org/wiki/File:Piaynemo_Raja_Ampat.jpg",
+    "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/Piaynemo_Raja_Ampat.jpg/1280px-Piaynemo_Raja_Ampat.jpg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail"
+  }
+]

@@ -1,0 +1,16 @@
+import {companionPhotos} from './companionData';
+import type {AreaContent} from './companionData';
+export const marineCategories = ['All','Fish','Turtles','Critters','Corals','Other'] as const;
+export const marineTopics = [
+ {key:'critters',category:'Critters',title:'Look a little closer',subtitle:'Nudibranchs · Shrimps · Crabs',photo:companionPhotos.clown,alt:'Anemone habitat on a coral reef',body:'Take time to observe small reef habitats. Look for tiny shapes among anemones, on rocks and along the sand without moving or touching anything.',prompts:['What small animals live around anemones?','How can I photograph tiny subjects?']},
+ {key:'corals',category:'Corals',title:'The reef is alive',subtitle:'Corals · Anemones · Reef habitats',photo:companionPhotos.turtle,alt:'Coral reef habitat',body:'Explore the shapes and textures that make up a reef. Notice branching, rounded and plate-like forms, and leave plenty of space between your fins and the reef.',prompts:['How do coral shapes differ?','What makes a healthy reef habitat?']},
+ {key:'other',category:'Other',title:'Beyond the reef fish',subtitle:'Jellyfish · Dolphins · Open-water life',photo:companionPhotos.manta,alt:'Open-water marine habitat',body:'Keep your curiosity open to life beyond reef fish. Explore floating animals and marine mammals, and follow local guidance for watching wildlife without approaching or chasing it.',prompts:['What might I notice in open water?','How can I watch wildlife respectfully?']},
+];
+export function experienceItems(area:AreaContent){return [
+ {id:'reef',kind:'study',title:area.study,summary:area.key==='raja'?'Help recognise manta encounters.':'Share your reef-fish observations.',photo:area.key==='raja'?companionPhotos.manta:companionPhotos.clown,detail:area.key==='raja'?'Manta encounter photos from Raja Ampat.':'Reef-fish photos from Bali.'},
+ {id:'turtles',kind:'study',title:area.short+' Turtle Photo Study',summary:'Turn a turtle encounter into a record.',photo:companionPhotos.turtle,detail:'Turtle photographs with the encounter date and region. Keep your distance and never interrupt a turtle’s route to the surface.'},
+ {id:'habitats',kind:'study',title:area.short+' Reef Habitat Watch',summary:'Record the reef, not just its fish.',photo:companionPhotos.tang,detail:'Wide photographs showing reef habitat, together with the date and region. Take photographs without touching or rearranging the reef.'},
+ {id:'shore',kind:'cleanup',title:area.cleanup,summary:'Care for the coast between dives.',photo:companionPhotos.turtle,detail:'An organizer-led shoreline cleanup. Ask the organizer for the meeting point, time and equipment before joining.'},
+ {id:'plastic',kind:'cleanup',title:area.short+' Plastic Survey',summary:'Collect, sort and record shoreline litter.',photo:companionPhotos.manta,detail:'A guided shoreline litter survey focused on sorting and recording collected waste. Follow the organizer’s handling instructions.'},
+ {id:'coast',kind:'cleanup',title:area.short+' Coastal Care Walk',summary:'A lighter way to get involved on land.',photo:companionPhotos.clown,detail:'A shoreline walk combining litter collection and coastal observation. Confirm access and meeting details with the organizer.'},
+];}

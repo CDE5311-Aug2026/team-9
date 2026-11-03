@@ -2,3 +2,41 @@
 @media(min-width:600px){.v3{height:min(844px,calc(100dvh - 48px));min-height:600px}}@media(max-width:370px){.o-polaroid{width:calc(100% - 50px);height:285px}.o-polaroid>img{width:100%;height:200px}.o-polaroid p{font-size:22px}.o-polaroids{height:330px}.o-profile h1{font-size:32px}.o-home>h1{font-size:37px}}@media(prefers-reduced-motion:reduce){.o-polaroid{transition:none}}
 .o-add{color:#009fe8;font-size:14px}.o-add:disabled{opacity:.4}.o-results-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 12px}.v3 .v-result{padding:0;border:0;position:relative;min-width:0}.o-results-grid .v-result>.v-row{display:block}.o-results-grid .v-result-toggle{display:flex;flex-direction:column;align-items:stretch;width:100%;gap:8px}.o-results-grid .v-result-toggle>img{width:100%;height:108px;border-radius:5px;object-fit:cover}.o-results-grid .v-result-toggle strong{font-size:14px;font-weight:400}.o-results-grid .v-result-toggle small{display:none}.o-results-grid .v-result-toggle>span:last-child{position:absolute;right:0;top:115px}.o-results-grid input[type=checkbox]{position:absolute;right:8px;top:8px;z-index:2;accent-color:#009fe8;width:22px;height:22px}.v3 .v-result.o-expanded{grid-column:1/-1;background:#e5e7e9;padding:14px;border-radius:12px}.o-results-grid .o-expanded .v-result-toggle>img{height:150px}.o-results-grid .o-expanded .v-result-toggle>span:last-child{top:172px;right:16px}.o-expanded .v-expanded>.v-hero{display:none}.o-analysis-fish{width:75px;height:auto}.o-id-tips,.o-natural-history{display:flex;flex-direction:column;gap:14px}.o-id-tips{font-size:14px}.o-natural-history p{color:#61666e;font-size:14px}.v3 .v-library button{aspect-ratio:1}.v3 .v-picker>.v-sticky{position:static}.v3 .v-expanded{white-space:pre-line}.v3 .v-result-toggle{min-width:0}
 .v3 .o-polaroid p{font:400 25px/30px Caveat,cursive}.v3 .o-polaroid small{font-size:11px;line-height:13.2px}.v3 .o-badges p{font-size:12px}.v3 .o-badges small{font-size:10px}.v3 .o-stats small{font-size:10px}.v3 .o-recommend-card>small{font-size:10px}.v3 .o-explore-map>small{font-size:10px}
+
+/* V3 confirmed stage dropdown and progressive species knowledge. */
+.o-recommend-heading{display:flex;align-items:center;gap:8px;min-height:48px}
+.v3 .o-recommend-heading h2{flex:1;min-width:0;font-size:24px;line-height:32px}
+.o-stage-picker{position:relative;flex:0 0 140px}
+.o-stage-trigger{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:48px;padding:10px 12px;background:#fff;border-radius:12px;font-size:13px}
+.o-stage-options{position:absolute;right:0;top:52px;width:180px;padding:8px;background:#fff;border:1px solid #e0e3e6;border-radius:12px;z-index:3;box-shadow:0 6px 18px #15171912}
+.o-stage-options button{display:flex;align-items:center;gap:8px;width:100%;min-height:48px;padding:10px;border-radius:8px;font-size:13px;text-align:left}
+.o-stage-options button[aria-pressed=true]{background:#e5f5ff}
+.o-recommend-footer{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;font-size:12px}
+.o-recommend-footer a{display:flex;align-items:center;min-height:44px}
+.o-recommend-footer a:last-child{flex-shrink:0}
+.v3 .o-recommend-card>p{font-size:12px}
+.v3 .o-blue-tang-cue{font-size:13px;line-height:20px}
+.o-knowledge{display:flex;flex-direction:column;gap:14px;background:#f2f5f7;border-radius:16px;padding:16px}
+.o-knowledge-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:0}
+.o-knowledge-facts dt{font-size:10px;font-weight:600;line-height:16px;text-transform:uppercase}
+.o-knowledge-facts dd{margin:2px 0 0;font-size:12px;line-height:18px}
+.v3 .o-knowledge h2{font-size:20px;line-height:26px}
+.o-knowledge-question{display:flex;flex-direction:column;gap:8px}
+.o-knowledge-question>button{display:flex;align-items:center;gap:8px;width:100%;min-height:48px;padding:12px;background:white;border-radius:10px;text-align:left;font-size:13px;font-weight:600;line-height:19px}
+.o-knowledge-answer{display:flex;flex-direction:column;gap:8px}
+.v3 .o-knowledge-answer p{font-size:13px;line-height:19px}
+.o-knowledge-answer a{font-size:11px;line-height:17px;align-self:flex-start;text-decoration:underline;text-underline-offset:3px}
+.o-knowledge-followup{min-height:44px;text-align:left;font-size:12px;line-height:18px}
+.o-species-identity{display:contents}
+.v3 .v-content:has(.o-knowledge){padding-top:0}
+.v3 .v-content:has(.o-knowledge)>.v-back{display:flex;align-items:center;min-height:44px}
+.v3 .v-content:has(.o-knowledge)>.v-hero{height:216px;aspect-ratio:auto;flex-shrink:0}
+.v3 .v-content:has(.o-knowledge)>.o-species-identity{display:flex;flex-direction:column;gap:4px}
+
+/* Confirmed AI cues, card contrast, and contextual first-use guide. */
+.o-ai-icon{width:16px;height:16px;flex:none;object-fit:contain;display:inline-block;vertical-align:middle}.o-ai-icon.large{width:56px;height:56px}.o-ai-heading{display:flex;align-items:center;gap:12px}.o-ai-heading .o-ai-icon{width:24px;height:24px}.o-stage-trigger{gap:6px;padding:10px 8px}
+.v3 .v-panel.o-around-card{background:#fff;border:1px solid #dde3e8;border-radius:20px}.o-around-card .v-species-row{background:transparent}.v3 .v-panel.o-cleanup-card{background:#fff0e5;border-radius:20px}.v3 .v-panel.o-study-card{color:white}.o-study-card .v-pill{color:#151719;background:white}
+.o-milestone{min-height:68px}.o-milestone>div{display:flex;flex-direction:column;gap:4px}.v3 .o-milestone p{font-size:14px}
+.o-species-ai{background:#e5f5ff;border-radius:12px;padding:12px}.o-ai-entry{display:flex;gap:10px;align-items:flex-start;text-align:left;width:100%;min-height:44px}.o-ai-entry .o-ai-icon{width:18px;height:18px;margin-top:2px}.v3 .o-ai-entry strong{font-size:13px;line-height:20px}.o-ai-entry small{margin-top:3px;font-size:12px}.o-ai-composer{display:flex;flex-direction:column;gap:12px;margin-top:12px}.o-ai-composer>small{font-size:11px;color:#61666e}.o-ai-composer form{display:flex;gap:6px}.o-ai-composer input{min-width:0;flex:1;background:#fff;border:1px solid #c8d8e3;border-radius:10px;padding:10px;font-size:12px}.o-ai-composer form button{background:#009fe8;border-radius:10px;width:44px;min-height:44px;font-size:20px}.o-ai-sample{font-size:12px;text-align:left;min-height:44px}.o-ai-close{align-self:flex-end;min-height:44px;font-size:12px}.v3 .o-ai-composer p{font-size:12px}
+.v3{position:relative}.o-tour{position:absolute;inset:0;z-index:100;overflow:hidden;touch-action:none}.o-tour-mask{position:absolute;inset:0}.o-tour-card{position:absolute;left:20px;right:20px;background:white;border-radius:20px;padding:20px;color:#151719;touch-action:pan-y;max-height:calc(100% - 100px);overflow:auto}.o-tour-card header{display:flex;align-items:center;justify-content:space-between;gap:12px}.v3 .o-tour-card h2{font:600 18px/24px Manrope,sans-serif}.o-tour-card header small{font-size:12px;color:#61666e}.o-tour-card ol{list-style:none;counter-reset:feature;display:flex;flex-direction:column;gap:14px;padding:0;margin:18px 0}.o-tour-card li{display:flex;gap:10px;counter-increment:feature}.o-tour-card li:before{content:counter(feature);color:#009fe8;font-size:11px;font-weight:600;padding-top:2px}.v3 .o-tour-card strong{display:block;font-size:13px;line-height:18px}.v3 .o-tour-card p{font-size:12px;line-height:17px;margin-top:3px;color:#61666e}.o-tour-card footer{display:flex;align-items:center;justify-content:space-between;gap:20px}.o-tour-card footer button{min-height:44px;font-size:13px}.o-tour-card footer .v-button{width:140px;margin:0;color:white}.o-tour-arrow{position:absolute;left:calc(50% - 10px);font-size:30px;line-height:30px;color:white}
+.o-profile .v-row>a{min-height:44px}
