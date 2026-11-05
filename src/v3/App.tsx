@@ -1,3 +1,5 @@
+import {ChallengeCheck} from './ChallengeCheck';
+import {FirstRun} from './FirstRun';
 import {usePhoneScale} from './usePhoneScale';
 import {EquipmentProvider} from './Equipment';
 import {normalizeIdeas,ideaKey} from './savedIdeas';
@@ -19,8 +21,8 @@ import {CollectionReview,reviewIds} from './CollectionReview';
 import {Analysis,Picker,Results} from './Identify';
 import {Species,Study} from './Explore';
 import {Areas,Explore} from './Discover';
-import {Destination,ExperienceDetail,Learning,Personalize,SavedIdeas} from './CompanionDetails';
-import {defaultPreferences, getArea, stages} from './companionData';
+import {Destination,ExperienceDetail,Learning,SavedIdeas} from './CompanionDetails';
+import {defaultPreferences, stages} from './companionData';
 import type {Preferences, Stage} from './companionData';
 import {Onboarding} from './Onboarding';
 import {Profile} from './Profile';
@@ -33,7 +35,14 @@ import type {DiveChallengeState} from './DiveChallenge';
 import {Tour,tourPages} from './Tour';
 import {OceanProfile} from './OceanProfile';
 export function V3App(){return <EquipmentProvider><V3Content/></EquipmentProvider>}
-function V3Content(){const phoneRef=usePhoneScale();const [showFrame,setShowFrame]=useState(()=>read<boolean>('previewFrame',true));const nav=useNavigate(),location=useLocation(),{pathname,search}=location,navigationType=useNavigationType(),page=(pathname==='/'?'home':pathname.replace(/^\/v3\/?/,''))||'home';const [saved,setSaved]=useState<number[]>(()=>read('saved',[])),[guest,setGuest]=useState(()=>read('guest',false)),[area,setArea]=useState(()=>{const stored=read<string>('area','Amed, Bali');return stored==='Bali, Indonesia'?'Amed, Bali':stored}),[video,setVideo]=useState(false),[selectedPhotos,setSelectedPhotos]=useState<number[]>([0,1,2,3,4]),[handled,setHandled]=useState<number[]>(()=>read('handled',[])),[pending,setPending]=useState<number[]>([]),[lastCount,setLastCount]=useState(0),[contributed,setContributed]=useState(()=>read('contributed',false)),[quiz,setQuiz]=useState('');
+function V3Content(){const phoneRef=usePhoneScale();
+ const [onboardingDone,setOnboardingDone]=useState(()=>{try{
+   if(localStorage.getItem('divedex.v3.onboarding.done')==='true')return true;
+   if(localStorage.getItem('divedex.v3.onboarding.started')==='true')return false;
+   const returning=['preferences','savedIdeas','saved','tour.v1'].some(key=>localStorage.getItem('divedex.v3.'+key)!==null);
+   localStorage.setItem('divedex.v3.onboarding.'+(returning?'done':'started'),'true');return returning;
+ }catch{return false}});
+const [showFrame,setShowFrame]=useState(()=>read<boolean>('previewFrame',true));const nav=useNavigate(),location=useLocation(),{pathname,search}=location,navigationType=useNavigationType(),page=(pathname==='/'?'home':pathname.replace(/^\/v3\/?/,''))||'home';const [saved,setSaved]=useState<number[]>(()=>read('saved',[])),[guest,setGuest]=useState(()=>read('guest',false)),[area,setArea]=useState(()=>{const stored=read<string>('area','Amed, Bali');return stored==='Bali, Indonesia'?'Amed, Bali':stored}),[video,setVideo]=useState(false),[selectedPhotos,setSelectedPhotos]=useState<number[]>([0,1,2,3,4]),[handled,setHandled]=useState<number[]>(()=>read('handled',[])),[pending,setPending]=useState<number[]>([]),[lastCount,setLastCount]=useState(0),[contributed,setContributed]=useState(()=>read('contributed',false)),[quiz,setQuiz]=useState('');
  const [challenge,setChallenge]=useState<DiveChallengeState|null>(()=>read('diveChallenge',null));
  useEffect(()=>{try{localStorage.setItem('divedex.v3.diveChallenge',JSON.stringify(challenge));}catch{/* Storage is optional. */}},[challenge]);
  const [reviewHandled,setReviewHandled]=useState<number[]>(()=>read('reviewHandled',[]));
@@ -48,10 +57,10 @@ function V3Content(){const phoneRef=usePhoneScale();const [showFrame,setShowFram
  },[location.key,navigationType,page]);
  useGSAP(()=>{
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  gsap.fromTo(mainRef.current,{opacity:.35},{opacity:1,duration:.22,ease:'power2.out',clearProps:'opacity'});
+  gsap.fromTo(mainRef.current,{opacity:0,y:10},{opacity:1,y:0,duration:.34,ease:'power2.out',clearProps:'opacity,transform'});
  },{scope:mainRef,dependencies:[pathname,search],revertOnUpdate:true});
  useEffect(()=>{try{for(const [key,value] of Object.entries({saved,guest,area,contributed,handled,reviewHandled}))localStorage.setItem('divedex.v3.'+key,JSON.stringify(value));}catch{/* Prototype remains usable without browser storage. */}},[saved,guest,area,contributed,handled,reviewHandled]);
- const go=(p:string)=>nav('/v3/'+p,{state:{from:pathname+search}});const save=(ids:number[],sources=ids)=>{if(guest){setPending(ids);go('invitation');return;}setSaved(s=>[...new Set([...s,...ids])]);setHandled(s=>[...new Set([...s,...sources])]);setReviewHandled(s=>[...new Set([...s,...sources.filter(id=>reviewIds.includes(id))])]);setChallenge(c=>c?.status==='active'&&ids.includes(c.speciesId)?{...c,status:'complete'}:c);setLastCount(ids.length);go('saved');};
+ const go=(p:string)=>nav('/v3/'+p,{state:{from:pathname+search,returnState:location.state}});const save=(ids:number[],sources=ids)=>{if(guest){setPending(ids);go('invitation');return;}setSaved(s=>[...new Set([...s,...ids])]);setHandled(s=>[...new Set([...s,...sources])]);setReviewHandled(s=>[...new Set([...s,...sources.filter(id=>reviewIds.includes(id))])]);setChallenge(c=>c?.status==='active'&&ids.includes(c.speciesId)?{...c,status:'complete'}:c);setLastCount(ids.length);go('saved');};
  const [tour,setTour]=useState<number|null>(null),[,setTourSeen]=useState(()=>read('tour.v1',false)),[returnPage,setReturnPage]=useState('home');
  const startTour=()=>{setReturnPage(page);setTour(0);go('home')};
  const closeTour=useCallback(()=>{setTour(null);setTourSeen(true);try{localStorage.setItem('divedex.v3.tour.v1','true')}catch{/* Storage is optional. */}nav('/v3/'+returnPage)},[nav,returnPage]);
@@ -62,12 +71,20 @@ function V3Content(){const phoneRef=usePhoneScale();const [showFrame,setShowFram
  const [removedIdea,setRemovedIdea]=useState<SavedIdea|null>(null);
  const [savedIdeas,setSavedIdeas]=useState<SavedIdea[]>(()=>normalizeIdeas(read('savedIdeas',[])));
  useEffect(()=>{try{localStorage.setItem('divedex.v3.homeArea',JSON.stringify(homeArea));localStorage.setItem('divedex.v3.stage',JSON.stringify(stage));localStorage.setItem('divedex.v3.preferences',JSON.stringify(preferences));localStorage.setItem('divedex.v3.savedIdeas',JSON.stringify(savedIdeas));}catch{/* Local storage is optional. */}},[stage,preferences,savedIdeas,homeArea]);
+ useEffect(()=>{if(!onboardingDone&&page==='home')nav('/v3/welcome',{replace:true});},[onboardingDone,page,nav]);
+ const finishOnboarding=(topics:string[]|null)=>{
+   if(topics!==null)setPreferences(current=>({...current,topics,interests:topics.includes('Photography')||topics.includes('Macro photography')?['Underwater photography']:topics.length?['Marine life']:[]}));
+   setOnboardingDone(true);
+   try{localStorage.setItem('divedex.v3.onboarding.done','true');localStorage.removeItem('divedex.v3.onboarding.draft')}catch{/* Optional storage. */}
+   nav('/v3/explore?scope=world',{replace:true});
+ };
  const settingsPages=['settings','account','location','privacy','contributions','notifications','help','about'];const mainPages=['home','explore','collection','profile'];const onboarding=['welcome','intro','signup','login','verify','invitation','try','first-result'];
  useDetailReveal(mainRef,pathname+search,/^(destination|learn|species|guide|experience)\//.test(page));
  let content;
- if(page==='home')content=<Home onSaveIdea={idea=>setSavedIdeas(values=>values.some(value=>ideaKey(value)===ideaKey(idea))?values:[...values,idea])} onRemoveIdea={idea=>{setRemovedIdea(idea);setSavedIdeas(values=>values.filter(v=>ideaKey(v)!==ideaKey(idea)))}} savedIdeas={savedIdeas} saved={saved} area={stage==='At the spot'?homeArea:area} setArea={value=>{setHomeArea(value);setArea(value)}} onBrowse={()=>{if(stage==='At the spot')setArea(homeArea)}} stage={stage} setStage={setStage} preferences={preferences} discovered={collectionIds(saved).length} challenge={challenge} onStartChallenge={id=>setChallenge({speciesId:id,place:stage==='At the spot'?homeArea:area,status:'active'})}/>;
+ if(page==='welcome'||page==='intro')content=<FirstRun page={page} preferences={preferences} onFinish={finishOnboarding}/>;
+ else if(page==='home')content=<Home onSaveIdea={idea=>setSavedIdeas(values=>values.some(value=>ideaKey(value)===ideaKey(idea))?values:[...values,idea])} onRemoveIdea={idea=>{setRemovedIdea(idea);setSavedIdeas(values=>values.filter(v=>ideaKey(v)!==ideaKey(idea)))}} savedIdeas={savedIdeas} saved={saved} area={stage==='At the spot'?homeArea:area} setArea={value=>{setHomeArea(value);setArea(value)}} onBrowse={()=>{if(stage==='At the spot')setArea(homeArea)}} stage={stage} setStage={setStage} preferences={preferences} discovered={collectionIds(saved).length} challenge={challenge} onStartChallenge={id=>setChallenge({speciesId:id,place:stage==='At the spot'?homeArea:area,status:'active'})}/>;
  else if(page.startsWith('marine-topic/'))content=<MarineTopic topic={page.split('/')[1]}/>;
- else if(page==='preferences'||page==='intro')content=<Personalize preferences={preferences} onSkip={()=>go('home')} onSave={prefs=>{setPreferences(prefs);const planned=getArea(prefs.plan);if(planned)setArea(planned.label);go('home')}}/>;
+ else if(page==='preferences')content=<FirstRun page="preferences" preferences={preferences} onFinish={topics=>{if(topics!==null)setPreferences(current=>({...current,topics}));try{localStorage.removeItem('divedex.v3.onboarding.draft')}catch{/* Optional storage. */}nav('/v3/home',{replace:true})}}/>;
  else if(page.startsWith('destination/'))content=<Destination key={page} areaKey={page.split('/')[1]} saved={savedIdeas} onSave={idea=>setSavedIdeas(values=>values.some(v=>ideaKey(v)===ideaKey(idea))?values.filter(v=>ideaKey(v)!==ideaKey(idea)):[...values,idea])}/>;
  else if(page==='saved-ideas')content=<SavedIdeas saved={savedIdeas}/>;
  else if(page.startsWith('experience/'))content=<ExperienceDetail key={page} areaKey={page.split('/')[1]} kind={page.split('/')[2]} onContribute={()=>setContributed(true)}/>;
@@ -76,8 +93,9 @@ function V3Content(){const phoneRef=usePhoneScale();const [showFrame,setShowFram
  else if(page==='collection')content=<Collection saved={saved} pendingReview={reviewIds.filter(id=>!reviewHandled.includes(id)).length}/>;
  else if(page==='collection-review')content=<CollectionReview handled={reviewHandled} onConfirm={(source,id)=>{setSaved(values=>[...new Set([...values,id])]);setReviewHandled(values=>[...new Set([...values,source])]);}}/>;
  else if(page==='explore')content=<Explore saved={saved} area={area} setArea={setArea} preferences={preferences}/>;
- else if(page==='areas')content=<Areas area={area} onSelect={s=>{setArea(s);go('explore')}}/>;
+ else if(page==='areas')content=<Areas area={area} onSelect={s=>{setArea(s);if(location.state?.from==='/v3/location')nav('/v3/location',{replace:true,state:location.state.returnState});else go('explore')}}/>;
  else if(page==='identify')content=<Picker onChoose={(ids,v)=>{setVideo(v);setSelectedPhotos(ids);setHandled([]);go('analysis')}}/>;
+ else if(page==='challenge-check')content=<ChallengeCheck challenge={challenge} onConfirm={id=>save([id])}/>;
  else if(page==='analysis')content=<Analysis video={video}/>;
  else if(page==='results')content=<Results onSave={save} saved={handled} video={video} selectedPhotos={selectedPhotos}/>;
  else if(page.startsWith('species/')||page.startsWith('guide/'))content=<Species id={Number(page.split('/')[1])} saved={saved} guide={page.startsWith('guide/')}/>;
@@ -91,5 +109,5 @@ function V3Content(){const phoneRef=usePhoneScale();const [showFrame,setShowFram
  else if(page==='quiz')content=<><Back to="saved" label="Done"/><h1>Ocean quiz</h1><h2>{quiz?quiz==='Whale shark'?'You remembered!':'Now you know.':'Remember this one?'}</h2><img className="v-hero" src={species[5].photo} alt={quiz?'Whale shark':'Marine animal to identify'}/>{quiz?<><h2>Whale shark</h2><p>{quiz==='Whale shark'?'That’s right.':'Try again next time.'}</p><Go className="v-button" to="collection">Done</Go></>:<>{['Whale shark','Blacktip reef shark','Nurse shark'].map(a=><Button secondary key={a} onClick={()=>setQuiz(a)}>{a}</Button>)}<Button secondary onClick={()=>setQuiz('reveal')}>Reveal name</Button></>}</>;
  else if(settingsPages.includes(page))content=<Profile onReplay={startTour} key={page} page={page} area={area} guest={guest} contributed={contributed} onWithdraw={()=>setContributed(false)} onSignOut={()=>{setGuest(true);go('welcome')}}/>;
  else content=<><h1>Let’s get back to the ocean.</h1><Go className="v-button" to="home">Home</Go></>;
- return <><div className="c-preview-toolbar"><button type="button" role="switch" aria-checked={showFrame} onClick={()=>{const next=!showFrame;setShowFrame(next);try{localStorage.setItem('divedex.v3.previewFrame',JSON.stringify(next));}catch{/* Preview preferences are optional. */}}}><svg aria-hidden="true" width="16" height="18" viewBox="0 0 16 22" fill="none"><rect x="2" y="1" width="12" height="20" rx="3" stroke="currentColor" strokeWidth="1.5"/><path d="M6 18h4" stroke="currentColor" strokeLinecap="round"/></svg><span>Phone frame</span><span className="c-preview-switch" aria-hidden="true"><i/></span></button></div><div ref={phoneRef} className={'v2 v3 '+(showFrame?'c-device-framed ':'c-device-bare ')+(page==='home'?'v-home':'')}><Status/><main ref={mainRef} className={'v-content '+(page==='identify'?'v-picker':page==='collection'?'v-collection':'')} id="v3-main">{content}</main>{(mainPages.includes(page)||settingsPages.includes(page))?<Nav page={settingsPages.includes(page)?'profile':page}/>:<div className="v-indicator"><i/></div>}{removedIdea&&<div className="c-idea-undo" role="status"><span>Saved idea deleted</span><button onClick={()=>{setSavedIdeas(values=>values.some(v=>ideaKey(v)===ideaKey(removedIdea))?values:[...values,removedIdea]);setRemovedIdea(null)}}>Undo</button><button aria-label="Dismiss deletion message" onClick={()=>setRemovedIdea(null)}>×</button></div>}{tour!==null&&<Tour step={tour} onClose={closeTour} onNext={()=>{if(tour===3)closeTour();else{setTour(tour+1);go(tourPages[tour+1])}}}/>}</div></>;
+ return <><div className="c-preview-toolbar"><button type="button" role="switch" aria-checked={showFrame} onClick={()=>{const next=!showFrame;setShowFrame(next);try{localStorage.setItem('divedex.v3.previewFrame',JSON.stringify(next));}catch{/* Preview preferences are optional. */}}}><svg aria-hidden="true" width="16" height="18" viewBox="0 0 16 22" fill="none"><rect x="2" y="1" width="12" height="20" rx="3" stroke="currentColor" strokeWidth="1.5"/><path d="M6 18h4" stroke="currentColor" strokeLinecap="round"/></svg><span>Phone frame</span><span className="c-preview-switch" aria-hidden="true"><i/></span></button><Go className="c-preview-onboarding" to="welcome">Try onboarding</Go></div><div ref={phoneRef} className={'v2 v3 '+(showFrame?'c-device-framed ':'c-device-bare ')+(page==='home'?'v-home':'')}><Status/><main ref={mainRef} className={'v-content '+(page==='analysis'?'c-analysis':page==='identify'?'v-picker c-recognition':page==='results'?'c-recognition':page==='collection'?'v-collection':'')} id="v3-main">{content}</main>{(mainPages.includes(page)||settingsPages.includes(page))?<Nav page={settingsPages.includes(page)?'profile':page}/>:<div className="v-indicator"><i/></div>}{removedIdea&&<div className="c-idea-undo" role="status"><span>Saved idea deleted</span><button onClick={()=>{setSavedIdeas(values=>values.some(v=>ideaKey(v)===ideaKey(removedIdea))?values:[...values,removedIdea]);setRemovedIdea(null)}}>Undo</button><button aria-label="Dismiss deletion message" onClick={()=>setRemovedIdea(null)}>×</button></div>}{tour!==null&&<Tour step={tour} onClose={closeTour} onNext={()=>{if(tour===3)closeTour();else{setTour(tour+1);go(tourPages[tour+1])}}}/>}</div></>;
 }

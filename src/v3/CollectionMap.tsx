@@ -1,3 +1,4 @@
+import {usePhoneMapDialog} from './usePhoneMapDialog';
 import {useEffect,useRef,useState} from 'react';
 import {useLocation,useNavigate} from 'react-router-dom';
 import L from 'leaflet';
@@ -38,8 +39,8 @@ function Canvas({trips,view,onSpecies}:{trips:CollectionTrip[];view:React.RefObj
 }
 export function CollectionMap({saved}:{saved:number[]}){
  const trips=collectionTrips(saved).filter(t=>t.id!=='unassigned'),[expanded,setExpanded]=useState(false),dialog=useRef<HTMLDialogElement>(null),view=useRef<View|null>(null),trigger=useRef<HTMLButtonElement>(null);
- const navigate=useNavigate(),location=useLocation();const onSpecies=(id:number,trip:string)=>navigate('/v3/species/'+id+'?trip='+trip,{state:{from:location.pathname+'?view=Map'}});
+ const navigate=useNavigate(),location=useLocation();const onSpecies=(id:number,trip:string)=>navigate('/v3/species/'+id+'?trip='+trip,{state:{from:location.pathname+'?view=Map',returnState:location.state}});
  const close=()=>{setExpanded(false);requestAnimationFrame(()=>trigger.current?.focus());};
- useEffect(()=>{if(expanded)dialog.current?.showModal();},[expanded]);
- return <section className="c-collection-map"><div className="c-live-map-preview">{!expanded&&<Canvas trips={trips} view={view} onSpecies={onSpecies}/>}<button ref={trigger} className="c-map-expand" onClick={()=>setExpanded(true)} aria-label="Expand map"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/></svg></button></div>{expanded&&<dialog ref={dialog} className="c-map-fullscreen" aria-label="Your discoveries map" onCancel={e=>{e.preventDefault();close();}}><header><h2>Your discoveries</h2><button onClick={close} aria-label="Collapse map">↙ Close map</button></header><div className="c-map-full-body"><Canvas trips={trips} view={view} onSpecies={onSpecies}/></div></dialog>}</section>;
+ usePhoneMapDialog(dialog,expanded);
+ return <section className="c-collection-map"><div className="c-live-map-preview">{!expanded&&<Canvas trips={trips} view={view} onSpecies={onSpecies}/>}<button ref={trigger} className="c-map-expand" onClick={()=>setExpanded(true)} aria-label="Expand map"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/></svg></button></div>{expanded&&<dialog ref={dialog} className="c-map-fullscreen" aria-label="Your discoveries map" onCancel={e=>{e.preventDefault();close();}}><header><h2>Your discoveries</h2><button onClick={close} aria-label="Collapse map">× Close</button></header><div className="c-map-full-body"><Canvas trips={trips} view={view} onSpecies={onSpecies}/></div></dialog>}</section>;
 }

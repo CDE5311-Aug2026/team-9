@@ -5,8 +5,8 @@ export const exploreTabs = ['Dive sites', 'Marine life', 'Experiences'] as const
 export type ExploreTab = typeof exploreTabs[number];
 export const interests = ['Marine life', 'Dive destinations', 'Underwater photography', 'Learn & improve'] as const;
 export type Interest = typeof interests[number];
-export type Preferences = {interests: Interest[]; experience: string; plan: string};
-export const defaultPreferences: Preferences = {interests: ['Underwater photography'], experience: '', plan: ''};
+export type Preferences = {topics?: string[]; interests: Interest[]; experience: string; plan: string};
+export const defaultPreferences: Preferences = {interests: [], experience: '', plan: ''};
 export const companionPhotos = {
   manta: '/v3/companion/manta.png', turtle: '/v3/companion/turtle.png',
   clown: '/v3/companion/clown.png', tang: '/v3/companion/tang.png', idol: '/v3/companion/idol.png',
@@ -26,7 +26,7 @@ export const areaContent: Record<AreaKey, AreaContent> = {
     marine: [12, 6, 15, 7, 16, 0, 13, 17, 1, 14, 4, 3], study: 'Bali Reef Fish Photo Study', cleanup: 'Amed Shoreline Cleanup',
     latitude: -8.336, longitude: 115.656, radiusKm: 15,
     dives: [
-      {photo: '/v3/destinations/amed-coast.jpg', tag: 'AMED, BALI · REEF DIVE', title: 'A slower look at the reef', subtitle: 'Coral gardens. Small details. Bring your camera.'},
+      {photo: '/v3/destinations/amed-coast-user.png', tag: 'AMED, BALI · REEF DIVE', title: 'A slower look at the reef', subtitle: 'Coral gardens. Small details. Bring your camera.'},
       {photo: '/v3/destinations/jemeluk-sunset.jpg', tag: 'BALI · PHOTOGRAPHY INSPIRATION', title: 'Get a little closer', subtitle: 'Discover the little characters of the reef.'},
     ]},
   raja: {key: 'raja', label: 'Raja Ampat, Indonesia', short: 'Raja Ampat', region: 'Raja Ampat, Indonesia',

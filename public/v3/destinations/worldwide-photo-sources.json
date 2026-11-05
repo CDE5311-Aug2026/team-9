@@ -1,0 +1,17 @@
+[
+  {
+    "asset": "koh-tao.jpg",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f9/Ban_Mae_Haad_Ko_Tao.jpg/960px-Ban_Mae_Haad_Ko_Tao.jpg",
+    "page": "https://en.wikipedia.org/wiki/Ko_Tao"
+  },
+  {
+    "asset": "coron.jpg",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8b/Coron_skyline_Tapyas_%28Coron%2C_Palwan%3B_03-16-2024%29.jpg/960px-Coron_skyline_Tapyas_%28Coron%2C_Palwan%3B_03-16-2024%29.jpg",
+    "page": "https://en.wikipedia.org/wiki/Coron%2C_Palawan"
+  },
+  {
+    "asset": "maldives.jpg",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4f/AriAtoll.jpg/960px-AriAtoll.jpg",
+    "page": "https://en.wikipedia.org/wiki/Ari_Atoll"
+  }
+]

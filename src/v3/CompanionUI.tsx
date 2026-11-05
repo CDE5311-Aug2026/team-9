@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import gsap from 'gsap';
 import {useGSAP} from '@gsap/react';
 import type {ReactNode} from 'react';
@@ -21,16 +21,34 @@ export function MarineStories({ids, saved, compact = false}: {ids: number[]; sav
 // Native dialog provides focus containment and restores focus to its opener.
 export function Modal({children, onClose, label, motion = false, exitAction, placement}: {placement?: 'bottom';motion?: boolean; exitAction?: (() => void) | null; children: ReactNode; onClose: () => void; label: string}) {
   const ref = useRef<HTMLDialogElement>(null);
-  useEffect(() => {const dialog = ref.current!; dialog.showModal(); return () => dialog.close();}, []);
+  useLayoutEffect(() => {
+    const dialog = ref.current!;
+    const phone = dialog.closest<HTMLElement>('.v3');
+    const fit = () => {
+      if (!phone) return;
+      const bounds = phone.getBoundingClientRect();
+      const scale = bounds.width / phone.offsetWidth;
+      Object.assign(dialog.style, {zoom: String(1 / scale), left: `${bounds.left}px`, top: `${bounds.top}px`, width: `${bounds.width}px`, height: `${bounds.height}px`});
+      dialog.style.setProperty('--dialog-scale', String(scale));
+      dialog.style.setProperty('--dialog-content-height', `${bounds.height / scale - 64}px`);
+      dialog.style.borderRadius = `${parseFloat(getComputedStyle(phone).borderRadius) * scale}px`;
+    };
+    fit();
+    dialog.showModal();
+    const observer = new ResizeObserver(fit);
+    if (phone) observer.observe(phone);
+    window.addEventListener('resize', fit);
+    return () => {observer.disconnect(); window.removeEventListener('resize', fit); dialog.close();};
+  }, []);
   useGSAP(() => {
     if (!motion || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {exitAction?.(); return;}
     if (exitAction) {
-      gsap.to(ref.current, {opacity: 0, y: 10, '--backdrop-opacity': 0, duration: .16, ease: 'power1.in', onComplete: exitAction});
+      gsap.to(ref.current!.firstElementChild, {opacity: 0, y: 10, '--backdrop-opacity': 0, duration: .16, ease: 'power1.in', onComplete: exitAction});
     } else {
-      gsap.fromTo(ref.current, {opacity: 0, y: 14, '--backdrop-opacity': 0}, {opacity: 1, y: 0, '--backdrop-opacity': 1, duration: .26, ease: 'power2.out'});
+      gsap.fromTo(ref.current!.firstElementChild, {opacity: 0, y: 14, '--backdrop-opacity': 0}, {opacity: 1, y: 0, '--backdrop-opacity': 1, duration: .26, ease: 'power2.out'});
     }
   }, {scope: ref, dependencies: [exitAction], revertOnUpdate: true});
-  return <dialog ref={ref} className={'c-dialog'+(placement==='bottom'?' c-interest-sheet':'')} aria-label={label} onCancel={event => {event.preventDefault(); onClose();}} onClick={event => {if (event.target === ref.current) onClose();}}><div className="c-dialog-content">{children}</div></dialog>;
+  return <dialog ref={ref} className={'c-dialog c-phone-dialog'+(placement==='bottom'?' c-interest-sheet':'')} aria-label={label} onCancel={event => {event.preventDefault(); onClose();}} onClick={event => {if (event.target === ref.current) onClose();}}><div className="c-dialog-content">{children}</div></dialog>;
 }
 
 type LocationMode = 'confirm' | 'choose' | 'loading' | 'error';

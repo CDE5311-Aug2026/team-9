@@ -14,7 +14,7 @@ export function parseInterests(text:string){
  }));
 }
 export function uniqueInterests(values:string[]){return [...new Map(values.map(value=>[value.toLowerCase(),value])).values()];}
-export function selectedInterests(params:URLSearchParams){return uniqueInterests(params.getAll('interest').flatMap(value=>value?parseInterests(value):[]));}
+export function selectedInterests(params:URLSearchParams,fallback:string[]=[]){if(!params.has('interest')&&!params.has('interestsEdited'))return uniqueInterests(fallback);return uniqueInterests(params.getAll('interest').flatMap(value=>value?parseInterests(value):[]));}
 export function interestCategory(interest:string){
  if(interest==='Local culture')return 'Culture & heritage';
  if(interest==='Coral reefs')return 'Marine life';

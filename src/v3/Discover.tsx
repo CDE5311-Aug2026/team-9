@@ -4,7 +4,7 @@ import {InterestPicker} from './InterestPicker';
 import {interestCategory,selectedInterests} from './exploreInterests';
 import {species} from './model';
 import {MonthDropdown} from './MonthDropdown';
-import {useState} from 'react';
+import {useEffect,useState} from 'react';
 import {useSearchParams} from 'react-router-dom';
 import {LocationDialog, PhotoCard} from './CompanionUI';
 import {AIIcon} from './AIIcon';
@@ -21,11 +21,11 @@ function DiveRecommendations({area, preferences, onChoosePlace}: {area: AreaCont
   const [params,setParams]=useSearchParams();
   const monthValue=Number(params.get('month'));
   const month=monthValue>=1&&monthValue<=12?monthValue:new Date().getMonth()+1;
-  const interests=selectedInterests(params);
+  const interests=selectedInterests(params,preferences.topics??[]);
   const [editing,setEditing]=useState(false);
   const why = seasonalRecommendation(area.key, preferences,new Date(new Date().getFullYear(),month-1,15));
   const update=(key:string,value:string)=>{const next=new URLSearchParams(params);next.set(key,value);setParams(next,{replace:true});};
-  const applyInterests=(values:string[])=>{const next=new URLSearchParams(params);next.delete('interest');values.forEach(value=>next.append('interest',value));setParams(next,{replace:true});};
+  const applyInterests=(values:string[])=>{const next=new URLSearchParams(params);next.set('interestsEdited','1');next.delete('interest');values.forEach(value=>next.append('interest',value));setParams(next,{replace:true});};
   const months=Array.from({length:12},(_,i)=>new Date(2026,i,1).toLocaleString('en-US',{month:'long'}));
   const topics=interests.length?interests:['Marine life'];
   return <>
@@ -53,15 +53,17 @@ export function Explore({saved, area, setArea, preferences}: {saved: number[]; a
   const [params, setParams] = useSearchParams();
   const tab = Math.max(0, tabKeys.indexOf(params.get('tab') ?? 'sites'));
   const [choosing, setChoosing] = useState(false);
-  const region = getArea(area);
+  const requestedArea=areaContent[params.get('area') as keyof typeof areaContent];
+  useEffect(()=>{if(requestedArea&&requestedArea.label!==area)setArea(requestedArea.label);},[requestedArea,area,setArea]);
+  const region = requestedArea??getArea(area);
   const worldwide=params.get('scope')==='world'||(!params.has('scope')&&!params.has('tab'));
-  const setScope=(global:boolean)=>{const next=new URLSearchParams(params);if(global){next.set('scope','world');next.set('tab','sites');}else {next.set('scope','local');next.set('tab','sites');}setParams(next,{replace:true});};
-  const changeTab = (index: number) => {const next=new URLSearchParams(params);next.set('tab',tabKeys[index]);setParams(next,{replace:true});};
+  const setScope=(global:boolean)=>{const next=new URLSearchParams(params);next.delete('area');if(global){next.set('scope','world');next.set('tab','sites');}else {next.set('scope','local');next.set('tab','sites');}setParams(next,{replace:true});};
+  const changeTab = (index: number) => {const next=new URLSearchParams(params);next.set('tab',tabKeys[index]);next.set('scope',worldwide?'world':'local');setParams(next,{replace:true});};
   return <div className="c-explore">
     <div className="c-explore-sticky"><header className="c-explore-heading"><h1 className="c-page-title">Explore</h1><button className="c-area-trigger" aria-label={'Change location, current location: '+area} aria-haspopup="dialog" aria-expanded={choosing} title={area} onClick={() => setChoosing(true)}><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" strokeWidth="1.7"/></svg><span>{worldwide?'Worldwide':region?.short ?? area}</span><svg className="c-chevron" aria-hidden="true" width="12" height="12" viewBox="0 0 20 20" fill="none"><path d="m5 7.5 5 5 5-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg></button></header>
-    {!worldwide&&<div className="c-tabs" role="tablist" aria-label="Explore categories">{exploreTabs.map((label, i) => <button id={'explore-tab-' + i} role="tab" aria-selected={tab === i} aria-controls="explore-content" key={label} onClick={() => changeTab(i)}>{label}</button>)}</div>}
+    {<div className="c-tabs" role="tablist" aria-label="Explore categories">{exploreTabs.map((label, i) => <button id={'explore-tab-' + i} role="tab" aria-selected={tab === i} aria-controls="explore-content" key={label} onClick={() => changeTab(i)}>{label}</button>)}</div>}
     </div>
-    {worldwide?<div id="explore-content" aria-label="Worldwide destinations"><WorldwideSites onSelect={destination=>{setArea(destination.label);setScope(false);document.getElementById('v3-main')?.scrollTo(0,0);}}/></div>:region ? <div role="tabpanel" id="explore-content" aria-labelledby={'explore-tab-' + tab} className="c-explore-panel">
+    {worldwide?<div id="explore-content" aria-label="Worldwide destinations"><WorldwideSites tab={tabKeys[tab] as 'sites'|'marine'|'experiences'} saved={saved} topics={preferences.topics??[]} onSelect={destination=>{setArea(destination.label);setScope(false);document.getElementById('v3-main')?.scrollTo(0,0);}}/></div>:region ? <div role="tabpanel" id="explore-content" aria-labelledby={'explore-tab-' + tab} className="c-explore-panel">
       <ExploreMap key={region.key+tab} area={region} tab={tab} saved={saved}/>
       {tab === 0 ? <DiveRecommendations key={region.key} area={region} preferences={preferences} onChoosePlace={()=>setChoosing(true)}/> : tab === 1 ? <MarineDiscovery area={region} saved={saved}/> : <ExperienceDiscovery area={region}/>}
 

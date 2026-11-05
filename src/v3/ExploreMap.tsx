@@ -1,3 +1,4 @@
+import {usePhoneMapDialog} from './usePhoneMapDialog';
 import {useEffect, useRef, useState} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import L from 'leaflet';
@@ -56,11 +57,11 @@ function MapCanvas({area,tab,saved,view,onView,onNavigate}:{area:AreaContent;tab
 export function ExploreMap({area,tab,saved}:{area:AreaContent;tab:number;saved:number[]}){
  const [expanded,setExpanded]=useState(false);const dialog=useRef<HTMLDialogElement>(null), view=useRef<View|null>(null);
  const navigate=useNavigate(),location=useLocation();
- const onNavigate=(path:string)=>navigate('/v3/'+path,{state:{from:location.pathname+location.search}});
+ const onNavigate=(path:string)=>navigate('/v3/'+path,{state:{from:location.pathname+location.search,returnState:location.state}});
  const onView=(next:View)=>{view.current=next;};
- useEffect(()=>{if(expanded)dialog.current?.showModal();},[expanded]);
+ usePhoneMapDialog(dialog,expanded);
  return <section className="c-explore-map-wrap">
   <div className="c-live-map-preview">{!expanded&&<MapCanvas area={area} tab={tab} saved={saved} view={view} onView={onView} onNavigate={onNavigate}/>}<button className="c-map-expand" onClick={()=>setExpanded(true)} aria-label="Expand map" title="Expand map"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/></svg></button></div>
-  {expanded&&<dialog className="c-map-fullscreen" ref={dialog} aria-label={'Explore '+area.short+' map'} onCancel={e=>{e.preventDefault();setExpanded(false);}}><header><div><h2>{area.short}</h2></div><button onClick={()=>setExpanded(false)} aria-label="Collapse map">↙ Close map</button></header><div className="c-map-full-body"><MapCanvas area={area} tab={tab} saved={saved} view={view} onView={onView} onNavigate={onNavigate}/></div></dialog>}
+  {expanded&&<dialog className="c-map-fullscreen" ref={dialog} aria-label={'Explore '+area.short+' map'} onCancel={e=>{e.preventDefault();setExpanded(false);}}><header><div><h2>{area.short}</h2></div><button onClick={()=>setExpanded(false)} aria-label="Collapse map">× Close</button></header><div className="c-map-full-body"><MapCanvas area={area} tab={tab} saved={saved} view={view} onView={onView} onNavigate={onNavigate}/></div></dialog>}
  </section>;
 }
