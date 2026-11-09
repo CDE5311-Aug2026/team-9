@@ -1,3 +1,4 @@
+import {DiagonalArrow} from './ExploreArrow';
 import {useSearchParams} from 'react-router-dom';
 import {collectionTrips} from './collectionTrips';
 import {useState} from 'react';
@@ -19,7 +20,7 @@ export function Species({id,guide=false,saved=[]}:{id:number;guide?:boolean;save
    <header className="c-species-name"><h1>{s.name}</h1><i>{s.latin}</i><span className={'c-species-status'+(collected?' collected':'')}><span aria-hidden="true"/>{collected?'In your collection':'Not collected yet'}</span></header>
    <section className="c-species-fact"><h2>Fun fact</h2><p>{facts.fact}</p></section>
    <p className="c-species-reminder">{facts.reminder}</p>
-   <details className="c-species-source"><summary>Read the source</summary><a href={facts.source} target="_blank" rel="noreferrer">Species reference ↗</a>{credit && <p>Photo: <a href={credit.source} target="_blank" rel="noreferrer">{credit.title}</a> · {credit.author} · <a href={credit.licenseUrl} target="_blank" rel="noreferrer">{credit.license}</a>. Display cropped to fit.</p>}</details>
+   <details className="c-species-source"><summary>Read the source</summary><a href={facts.source} target="_blank" rel="noreferrer">Species reference <DiagonalArrow/></a>{credit && <p>Photo: <a href={credit.source} target="_blank" rel="noreferrer">{credit.title}</a> · {credit.author} · <a href={credit.licenseUrl} target="_blank" rel="noreferrer">{credit.license}</a>. Display cropped to fit.</p>}</details>
    {validId===4?<BlueTangKnowledge/>:<SpeciesCuriosity key={validId} name={s.name} cues={facts.cues} habitat={facts.habitat} reminder={facts.reminder} fact={facts.fact} source={facts.source}/>}
    {!guide && collected && <section className="c-species-observations"><h2>Your observations</h2><dl className="c-observation-table">
     <div><dt>Trip dates</dt><dd>{trip && trip.id!=='unassigned'?trip.dates:'Not recorded'}</dd></div>

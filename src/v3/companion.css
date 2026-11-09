@@ -961,3 +961,5 @@
 .c-wishlist-tile-title{gap:6px}
 .c-wishlist-tile-title>svg{width:15px;height:17px;flex:none}
 .c-wishlist-tile-title>span:first-of-type{flex:1}
+
+.c-diagonal-arrow{display:inline-block;vertical-align:-.1em;flex:none}
