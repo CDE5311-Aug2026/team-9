@@ -1,3 +1,4 @@
+import {DialogClose} from './DialogClose';
 import {createContext, useContext, useEffect, useState} from 'react';
 import type {ReactNode} from 'react';
 import {Modal} from './CompanionUI';
@@ -43,11 +44,11 @@ export function WishlistButton({tile=false,profile=false}:{tile?:boolean;profile
   const list = useContext(Wishlist)!;
   const [open,setOpen] = useState(false);
   return <>
-    <button className={tile ? "c-home-section-link c-wishlist-tile-title" : profile ? "c-wishlist-open c-profile-wishlist" : "c-wishlist-open"} aria-haspopup="dialog" onClick={()=>setOpen(true)}>
-      {tile ? <><Bookmark/><span>Want to see<small>{list.ids.length} saved</small></span><span aria-hidden="true">→</span></> : profile ? <><Bookmark/><strong>Want to see</strong><small>{list.ids.length} saved</small><span aria-hidden="true">→</span></> : <><Bookmark/> Want to see · {list.ids.length}</>}
+    <button className={tile ? "c-home-section-link c-wishlist-tile-title" : profile ? "c-wishlist-open c-profile-wishlist" : "c-wishlist-icon"} aria-label={tile||profile?undefined:`Want to see · ${list.ids.length} saved`} title="Want to see" aria-haspopup="dialog" onClick={()=>setOpen(true)}>
+      {tile ? <><Bookmark filled/><span>Want to see<small>{list.ids.length} saved</small></span><span aria-hidden="true">→</span></> : profile ? <><Bookmark filled/><strong>Want to see</strong><small>{list.ids.length} saved</small><span aria-hidden="true">→</span></> : <Bookmark filled/>}
     </button>
     {open && <Modal label="Want to see" onClose={()=>setOpen(false)} motion>
-      <div className="c-dialog-heading"><h2>Want to see</h2><button aria-label="Close list" onClick={()=>setOpen(false)}>×</button></div>
+      <div className="c-dialog-heading"><h2>Want to see</h2><DialogClose label="Close list" onClose={()=>setOpen(false)}/></div>
       {list.ids.length===0 && <p>Tap the bookmark on a species to save it here.</p>}
       {list.ids.map(id=><div className="c-wishlist-row" key={id}>
         <Go to={'guide/'+id}><img src={species[id].photo} alt=""/>{species[id].name}</Go>

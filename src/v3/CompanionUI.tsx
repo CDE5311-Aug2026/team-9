@@ -1,3 +1,4 @@
+import {DialogClose} from './DialogClose';
 import {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import gsap from 'gsap';
 import {useGSAP} from '@gsap/react';
@@ -92,7 +93,7 @@ export function LocationDialog({area, onSelect, onClose, start = 'confirm', moti
       <button className="c-secondary" onClick={close}>Not now</button>
       <div className="c-correction"><button onClick={locate}>Locate again</button><button onClick={choose}>Choose a place</button></div>
     </> : mode === 'choose' ? <>
-      <div className="c-dialog-heading"><h2>Choose a place</h2><button onClick={close} aria-label="Close location search">×</button></div>
+      <div className="c-dialog-heading"><h2>Choose a place</h2><DialogClose label="Close location search" onClose={close}/></div>
       <form onSubmit={event => {event.preventDefault(); if (custom) select(matches[0]?.label ?? custom);}}><input autoFocus className="v-input" aria-label="Search a region or dive site" placeholder="Search a region or dive site" value={query} maxLength={80} onChange={event => setQuery(event.target.value)}/></form>
       {onWorldwide&&<button className="c-place-option c-worldwide-option" onClick={()=>finish(onWorldwide)}>Browse worldwide<span aria-hidden="true">→</span></button>}
       <small className="v-muted">{query ? 'Search results' : 'Suggested places'}</small>

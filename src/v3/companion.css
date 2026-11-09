@@ -965,3 +965,9 @@
 .c-diagonal-arrow{display:inline-block;vertical-align:-.1em;flex:none}
 
 .c-first-options .c-interest-selected-mark{display:block;position:absolute;top:8px;right:8px;width:20px;height:20px;color:#1679af;pointer-events:none}
+.c-wishlist-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:8px 0 16px}
+.v3 .c-wishlist-heading h2{margin:0}
+.c-wishlist-icon{display:grid;place-items:center;flex:none;width:44px;height:44px;padding:0;color:#0075a9;background:transparent;border-radius:50%}
+.c-wishlist-tile-title>svg{color:#0075a9}
+.v3 .c-dialog-close{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;flex:none;gap:5px;min-width:44px;min-height:44px;padding:0;line-height:1}
+.c-dialog-close svg{display:block;flex:none}

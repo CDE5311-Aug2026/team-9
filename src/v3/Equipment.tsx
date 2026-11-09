@@ -1,3 +1,4 @@
+import {DialogClose} from './DialogClose';
 import {createContext,useContext,useEffect,useState} from 'react';
 import type {ReactNode} from 'react';
 import {Modal} from './CompanionUI';
@@ -50,7 +51,7 @@ export function QuickEquipment({onFinish,editing=false}:{onFinish:()=>void;editi
 }
 function EquipmentEditor({onClose}:{onClose:()=>void}){
  return <Modal label="My equipment" placement="bottom" motion onClose={onClose}>
-   <div className="c-dialog-heading"><h2>My equipment</h2><button onClick={onClose} aria-label="Close equipment">×</button></div>
+   <div className="c-dialog-heading"><h2>My equipment</h2><DialogClose label="Close equipment" onClose={onClose}/></div>
    <QuickEquipment editing onFinish={onClose}/>
  </Modal>;
 }

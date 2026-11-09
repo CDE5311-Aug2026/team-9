@@ -1,3 +1,4 @@
+import {DialogClose} from './DialogClose';
 import {useNavigate} from 'react-router-dom';
 import {Modal} from './CompanionUI';
 import {FeatureIntro} from './FeatureIntro';
@@ -7,7 +8,7 @@ import {useEffect,useState} from 'react';
 import {Back,Go} from './UI';
 import {AIIcon} from './AIIcon';
 import {read} from './model';
-import {uniqueInterests} from './exploreInterests';
+import {extraInterestGroups,uniqueInterests} from './exploreInterests';
 import type {Preferences} from './companionData';
 const choices=['Marine life','Natural scenery','Photography','Local culture','Coral reefs','Macro photography'];
 export function FirstRun({page,preferences,onFinish,onGuest}:{onGuest?:()=>void;page:string;preferences:Preferences;onFinish:(topics:string[]|null)=>void}){
@@ -16,10 +17,7 @@ export function FirstRun({page,preferences,onFinish,onGuest}:{onGuest?:()=>void;
  const [selected,setSelected]=useState<string[]>(()=>editing?(preferences.topics??[]):read('onboarding.draft',preferences.topics??[]));
  useEffect(()=>{if(editing)return;try{localStorage.setItem('divedex.v3.onboarding.draft',JSON.stringify(selected))}catch{/* Optional storage. */}},[selected,editing]);
  const [draft,setDraft]=useState<string[]|null>(null);
- const groups = [
-   {label:'Marine animals',topics:['Whale sharks','Turtles']},
-   {label:'Photography styles',topics:['Blackwater photography','Wide-angle photography']},
- ];
+ const groups=extraInterestGroups.map(({label,topics})=>({label,topics}));
  const previous=selected.filter(value=>!choices.includes(value)&&!groups.some(group=>group.topics.includes(value)));
  if(previous.length)groups.push({label:'Your other interests',topics:previous});
  const toggle=(choice:string)=>setSelected(values=>values.includes(choice)?values.filter(value=>value!==choice):[...values,choice]);
@@ -57,7 +55,7 @@ export function FirstRun({page,preferences,onFinish,onGuest}:{onGuest?:()=>void;
  </button>
  {draft && <Modal label="More interests" placement="bottom" motion onClose={()=>setDraft(null)}>
    <section className="c-topic-sheet">
-     <div className="c-dialog-heading"><h2>More interests</h2><button aria-label="Close more interests" onClick={()=>setDraft(null)}>×</button></div>
+     <div className="c-dialog-heading"><h2>More interests</h2><DialogClose label="Close more interests" onClose={()=>setDraft(null)}/></div>
      {groups.map(group=><fieldset key={group.label}><legend>{group.label}</legend>
        <div className="c-topic-pills">{group.topics.map(topic=><button type="button" key={topic} aria-pressed={draft.includes(topic)}
          onClick={()=>setDraft(draft.includes(topic)?draft.filter(value=>value!==topic):[...draft,topic])}>{topic}</button>)}</div>

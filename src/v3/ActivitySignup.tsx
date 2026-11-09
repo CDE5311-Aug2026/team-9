@@ -1,3 +1,4 @@
+import {DialogClose} from './DialogClose';
 import {useState} from 'react';
 import {Modal} from './CompanionUI';
 import {read} from './model';
@@ -31,7 +32,7 @@ export function ActivitySignup({activityId, title, region}: {
     {open && <Modal label={registered ? 'Cancel registration' : 'Activity sign-up'} onClose={() => setOpen(false)} motion>
       <div className="c-dialog-heading">
         <h2>{registered ? 'Cancel registration?' : 'Activity sign-up'}</h2>
-        <button aria-label="Close" onClick={() => setOpen(false)}>×</button>
+        <DialogClose label="Close" onClose={() => setOpen(false)}/>
       </div>
       <section className="c-card"><small>{region}</small><h3>{title}</h3></section>
       <button className="c-primary" onClick={confirm}>{registered ? 'Confirm cancellation' : 'Confirm sign-up'}</button>

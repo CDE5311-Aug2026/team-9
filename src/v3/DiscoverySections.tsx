@@ -1,4 +1,4 @@
-import {SaveSpecies} from './MarineWishlist';
+import {SaveSpecies,WishlistButton} from './MarineWishlist';
 import {useSearchParams} from 'react-router-dom';
 import {AIIcon} from './AIIcon';
 import {Back,Go} from './UI';
@@ -11,7 +11,7 @@ export function MarineDiscovery({area,saved}:{area:AreaContent;saved:number[]}){
  const available=[...new Set([...area.marine,8,9,10,11])];
  const collected=new Set(collectionIds(saved));
  const ids=available.filter(id=>category==='All'||species[id]?.category===category);
- return <section className="c-discovery-section"><div className="c-section-heading"><h2>Marine life in {area.short}</h2></div><div className="c-filter-chips" role="group" aria-label="Marine life categories">{marineCategories.map(c=><button key={c} aria-pressed={category===c} onClick={()=>{const next=new URLSearchParams(params);next.set('tab','marine');next.set('life',c);setParams(next,{replace:true});}}>{c}</button>)}</div><div className="c-marine-feed">{ids.map(id=><article className="c-marine-tile" key={id}><Go to={'guide/'+id}><div><img src={species[id].photo} alt="" loading="lazy"/>{collected.has(id)&&<span className="c-collected-label">✓ Collected</span>}</div><h3>{species[id].name}</h3></Go><SaveSpecies id={id}/></article>)}</div></section>;
+ return <section className="c-discovery-section"><div className="c-wishlist-heading"><h2>Marine life in {area.short}</h2><WishlistButton/></div><div className="c-filter-chips" role="group" aria-label="Marine life categories">{marineCategories.map(c=><button key={c} aria-pressed={category===c} onClick={()=>{const next=new URLSearchParams(params);next.set('tab','marine');next.set('life',c);setParams(next,{replace:true});}}>{c}</button>)}</div><div className="c-marine-feed">{ids.map(id=><article className="c-marine-tile" key={id}><Go to={'guide/'+id}><div><img src={species[id].photo} alt="" loading="lazy"/>{collected.has(id)&&<span className="c-collected-label">✓ Collected</span>}</div><h3>{species[id].name}</h3></Go><SaveSpecies id={id}/></article>)}</div></section>;
 }
 export function MarineTopic({topic}:{topic:string}){const item=marineTopics.find(t=>t.key===topic)??marineTopics[0];return <><Back to="explore?tab=marine" label="Marine life"/><img className="v-hero" src={item.photo} alt={item.alt}/><small>{item.category}</small><h1>{item.title}</h1><p>{item.body}</p><section className="c-card"><h2>Start with curiosity</h2>{item.prompts.map(p=><p key={p}>{p}</p>)}</section><Go className="c-primary" to="identify">Identify what you spotted</Go><Go className="c-secondary" to="learn/photo">Photography tips</Go></>;}
 export function ExperienceDiscovery({area}:{area:AreaContent}){
