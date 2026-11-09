@@ -47,8 +47,13 @@ export function FirstRun({page,preferences,onFinish,onGuest}:{onGuest?:()=>void;
    if(editing)onFinish(topics);
    else {setSelected(topics);navigate('/v3/intro-equipment');}
  };
- return <section className="c-first-run"><div className="c-first-top"><Back to={editing?"home":"intro-feature-4"} force/></div><header><h1>{editing?"Your interests":<>What draws you<br/>to the ocean?</>}</h1><p>Pick any mix. You can change it later.</p></header><div className="c-first-options" role="group" aria-label="Your interests">{choices.map((choice,index)=><button key={choice} aria-pressed={selected.includes(choice)} onClick={()=>toggle(choice)}><div className="c-interest-art" aria-hidden="true" style={{backgroundPosition:(index%3)*50+'% '+Math.floor(index/3)*100+'%'}}/><span>{choice}</span></button>)}</div><button className="c-more-open" aria-haspopup="dialog" onClick={()=>setDraft([...selected])}>
-   More interests <span aria-hidden="true">›</span>
+ return <section className="c-first-run"><div className="c-first-top"><Back to={editing?"home":"intro-feature-4"} force/></div><header><h1>{editing?"Your interests":<>What draws you<br/>to the ocean?</>}</h1><p>Pick any mix. You can change it later.</p></header><div className="c-first-options" role="group" aria-label="Your interests">{choices.map((choice,index)=><button key={choice} aria-pressed={selected.includes(choice)} onClick={()=>toggle(choice)}><div className="c-interest-art" aria-hidden="true" style={{backgroundPosition:(index%3)*50+'% '+Math.floor(index/3)*100+'%'}}/><span>{choice}</span>{selected.includes(choice)&&(
+   <svg className="c-interest-selected-mark" aria-hidden="true" viewBox="0 0 20 20">
+     <rect width="20" height="20" rx="6" fill="currentColor"/>
+     <path d="m5.5 10 3 3 6-6" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+   </svg>
+ )}</button>)}</div><button className="c-more-open" aria-haspopup="dialog" onClick={()=>setDraft([...selected])}>
+   More interests <svg className="c-more-chevron" aria-hidden="true" viewBox="0 0 16 16"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
  </button>
  {draft && <Modal label="More interests" placement="bottom" motion onClose={()=>setDraft(null)}>
    <section className="c-topic-sheet">

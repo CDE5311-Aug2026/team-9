@@ -932,7 +932,7 @@
 .stage-2 .c-feature-album figcaption{text-align:left}
 
 .c-more-open{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;margin-inline:4px;padding:0 18px;border:1px solid #d6d4ce;border-radius:16px;background:#fffefa;color:#252623;font:600 14px/18px Manrope,sans-serif}
-.c-more-open span{font-size:21px}
+.c-more-chevron{display:block;width:16px;height:16px;flex:none}
 .c-topic-sheet{display:grid;gap:22px;padding:6px 8px 4px}
 .c-topic-sheet fieldset{border:0;min-width:0;margin:0;padding:0}
 .c-topic-sheet legend{font:600 13px/20px Manrope,sans-serif;padding:0;margin-bottom:8px}
@@ -963,3 +963,5 @@
 .c-wishlist-tile-title>span:first-of-type{flex:1}
 
 .c-diagonal-arrow{display:inline-block;vertical-align:-.1em;flex:none}
+
+.c-first-options .c-interest-selected-mark{display:block;position:absolute;top:8px;right:8px;width:20px;height:20px;color:#1679af;pointer-events:none}
