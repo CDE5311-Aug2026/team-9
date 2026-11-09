@@ -1,3 +1,6 @@
+import {ActivitySignup} from './ActivitySignup';
+import {StudyPhotos} from './StudyPhotos';
+import type {StudyRecord} from './StudyPhotos';
 import {ideaFromParams,ideaKey,ideaRoute} from './savedIdeas';
 import type {SavedIdea} from './savedIdeas';
 import {CameraAdvice} from './DestinationSections';
@@ -31,18 +34,15 @@ export function Destination({areaKey, onSave, saved}: {areaKey: string; onSave: 
   return <><Back to="explore" label="Back"/><h1>{overview?'A little escape to '+area.short+'.':idea.title}</h1><img className="v-hero" src={idea.photo||area.dives[0].photo} alt={area.short + ' dive inspiration'}/><p>{area.region} · {area.key==='amed'?'Reefs, coastal views and time to wander.':'Reef encounters, island views and slower afternoons.'}</p><p className="c-muted">{new Date(2026,selection.month-1,1).toLocaleString('en-US',{month:'long'})}</p><button className="c-primary" onClick={() => onSave(selection)}>{isSaved ? 'Saved ✓' : 'Save this idea'}</button><TripOverview areaKey={area.key} interest={interest}/></>;
 
 }
-export function ExperienceDetail({areaKey, kind, onContribute}: {areaKey: string; kind: string; onContribute: () => void}) {
-  const [review, setReview] = useState(false), [publicUse, setPublicUse] = useState(false), [sent, setSent] = useState(false);
-  const [params] = useSearchParams();
-  const area = areaContent[areaKey as keyof typeof areaContent];
-  if (!area) return <><Back to="explore?tab=experiences"/><h1>Choose an area first.</h1></>;
-  const isStudy = kind === 'study';
-  const item=experienceItems(area).find(i=>i.kind===kind&&i.id===params.get('item'))??experienceItems(area).find(i=>i.kind===kind)!;
-  const originalStudy=item.id==='reef';
-  return <><Back to="explore?tab=experiences" label="Experiences"/><small className="v-muted">{isStudy ? 'Study' : 'Activity'} · {area.short}</small><h1>{item.title}</h1>
-    {!review && !sent && <><img className="v-hero" src={item.photo} alt="Ocean inspiration"/><p>{isStudy ? 'Explore how your encounter photos could contribute to research.' : 'Discover ways to care for the coast between dives.'}</p><section className="c-card"><h2>{isStudy ? 'Looking for' : 'Get involved'}</h2><p>{item.detail}</p></section>{isStudy ? (area.key === 'raja'||!originalStudy) ? <><p className="v-muted">Add a matching encounter photo to contribute.</p><Go className="c-primary" to="identify">Add an encounter photo</Go></> : <button className="c-primary" onClick={() => setReview(true)}>Review contribution</button> : <Go className="c-primary" to="explore?tab=experiences">Back to experiences</Go>}</>}
-    {review && !sent && <><section className="c-card"><h2>Your selected observation</h2><img className="c-review-photo" src={companionPhotos.clown} alt="Clownfish observation"/><p>Clown Anemonefish · 7 Oct 2026</p><p>Bali, Indonesia · Region only</p></section><section className="c-card"><h2>What you’ll share</h2><p>One photo, species, date and region. No precise coordinates or other observations.</p><label className="v-check"><input type="checkbox" checked={publicUse} onChange={e => setPublicUse(e.target.checked)}/>Allow public photo use · Optional</label></section><button className="c-primary" onClick={() => {setSent(true); onContribute();}}>Confirm contribution</button><button className="c-secondary" onClick={() => setReview(false)}>Back to study</button></>}
-    {sent && <><h2>Thank you for helping ocean research.</h2><Go className="c-primary" to="contributions">View contributions</Go></>}
+export function ExperienceDetail({areaKey,kind,saved,onContribute}:{areaKey:string;kind:string;saved:number[];onContribute:(record:StudyRecord)=>void}) {
+  const [params]=useSearchParams();
+  const area=areaContent[areaKey as keyof typeof areaContent];
+  if(!area)return <Back to="explore?tab=experiences"/>;
+  const items=experienceItems(area).filter(option=>option.kind===kind);
+  const item=items.find(option=>option.id===params.get('item'))??items[0];
+  if(!item)return <Back to="explore?tab=experiences"/>;
+  return <><Back to="explore?tab=experiences"/><small className="v-muted">{kind==='study'?'Study':'Activity'} · {area.short}</small><h1>{item.title}</h1>
+    {kind==='study'?<StudyPhotos key={item.id} title={item.title} area={areaKey} item={item.id} detail={item.detail} cover={item.photo} saved={saved} onSubmit={onContribute}/>:<><img className="v-hero" src={item.photo} alt=""/><section className="c-card"><h2>Get involved</h2><p>{item.detail}</p></section><ActivitySignup key={areaKey+item.id} activityId={areaKey+'.'+item.id} title={item.title} region={area.region}/></>}
   </>;
 }
 export function Learning({topic}: {topic: string}) {

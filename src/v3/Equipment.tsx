@@ -3,7 +3,7 @@ import type {ReactNode} from 'react';
 import {Modal} from './CompanionUI';
 import {AIIcon} from './AIIcon';
 import {companionPhotos} from './companionData';
-const types=['Action camera','Compact camera','Mirrorless / DSLR','Phone'] as const;
+const types=['Action camera','Compact camera','Mirrorless / DSLR','Phone','Other equipment'] as const;
 type Equipment={type:typeof types[number];model:string;capture:'Photos'|'Video';light:boolean};
 const EquipmentContext=createContext<{equipment:Equipment|null;save:(value:Equipment|null)=>void}>({equipment:null,save:()=>{}});
 export function EquipmentProvider({children}:{children:ReactNode}){
@@ -11,11 +11,66 @@ export function EquipmentProvider({children}:{children:ReactNode}){
  useEffect(()=>{try{localStorage.setItem('divedex.v3.equipment',JSON.stringify(equipment))}catch{/* Storage is optional. */}},[equipment]);
  return <EquipmentContext.Provider value={{equipment,save}}>{children}</EquipmentContext.Provider>;
 }
-function EquipmentEditor({onClose}:{onClose:()=>void}){
- const {equipment,save}=useContext(EquipmentContext),[draft,setDraft]=useState<Equipment>(equipment??{type:'Action camera',model:'',capture:'Photos',light:false});
- return <Modal label="My equipment" placement="bottom" motion onClose={onClose}><div className="c-dialog-heading"><h2>My equipment</h2><button onClick={onClose} aria-label="Close equipment">×</button></div><form className="c-equipment-form" onSubmit={e=>{e.preventDefault();save({...draft,model:draft.model.trim()});onClose();}}><fieldset><legend>Camera type</legend><div className="c-equipment-types">{types.map(type=><label key={type}><input type="radio" name="camera-type" checked={draft.type===type} onChange={()=>setDraft({...draft,type})}/>{type}</label>)}</div></fieldset><label>Model · optional<input className="v-input" value={draft.model} maxLength={60} onChange={e=>setDraft({...draft,model:e.target.value})} placeholder="e.g. GoPro HERO13"/></label><fieldset><legend>I usually shoot</legend><div className="c-equipment-types">{(['Photos','Video'] as const).map(capture=><label key={capture}><input type="radio" name="capture" checked={draft.capture===capture} onChange={()=>setDraft({...draft,capture})}/>{capture}</label>)}</div></fieldset><label className="c-equipment-check"><input type="checkbox" checked={draft.light} onChange={e=>setDraft({...draft,light:e.target.checked})}/>I bring an underwater light</label><button className="c-primary" type="submit">Save equipment</button></form></Modal>;
+const popularCameras: {model:string;type:Equipment['type']}[] = [
+  {model:'OM SYSTEM Tough TG-7',type:'Compact camera'},
+  {model:'Olympus Tough TG-6',type:'Compact camera'},
+  {model:'GoPro HERO',type:'Action camera'},
+  {model:'DJI Osmo Action',type:'Action camera'},
+  {model:'Mirrorless / DSLR',type:'Mirrorless / DSLR'},
+  {model:'Phone with housing',type:'Phone'},
+];
+
+export function QuickEquipment({onFinish,editing=false}:{onFinish:()=>void;editing?:boolean}){
+  const {equipment,save}=useContext(EquipmentContext);
+  const existing=popularCameras.find(camera=>camera.model===equipment?.model);
+  const [choice,setChoice]=useState(existing?.model??(equipment?'Other equipment':'No equipment'));
+  const [custom,setCustom]=useState(existing?'':(equipment?.model||equipment?.type||''));
+  function finish(){
+    const preset=popularCameras.find(camera=>camera.model===choice);
+    const model=preset?.model??custom.trim();
+    const type=preset?.type??(equipment?.model===model?equipment.type:'Other equipment');
+    save(choice==='No equipment'?null:{model,type,capture:equipment?.capture??'Photos',light:equipment?.light??false});
+    onFinish();
+  }
+  return <>
+    {!editing&&<header><h1>Your equipment</h1><p>What do you take underwater?</p></header>}
+    <div className="c-gear-picker" role="group" aria-label="Your equipment">
+      {popularCameras.map((camera,index)=><button type="button" key={camera.model} aria-pressed={choice===camera.model} onClick={()=>setChoice(camera.model)}>
+        <span className="c-gear-poster" aria-hidden="true">
+          <b>{['TG-7','TG-6','HERO','ACTION','DSLR','PHONE'][index]}</b>
+          <i style={{backgroundPosition:(index%3)*50+'% '+Math.floor(index/3)*100+'%'}}/>
+        </span>
+        <strong>{camera.model}</strong>
+      </button>)}
+      {['Other equipment','No equipment'].map(name=><button type="button" className="c-gear-text" key={name} aria-pressed={choice===name} onClick={()=>setChoice(name)}>{name}</button>)}
+    </div>
+    {choice==='Other equipment'&&<label className="c-camera-custom">Equipment name<input className="v-input" value={custom} onChange={e=>setCustom(e.target.value)} maxLength={60} placeholder="Camera or setup"/></label>}
+    <div className="c-first-actions"><button className="c-primary" onClick={finish} disabled={choice==='Other equipment'&&!custom.trim()}>{editing?'Save equipment':'Start exploring'}</button>{!editing&&<button type="button" className="c-text-button c-onboarding-skip" onClick={onFinish}>Skip for now</button>}</div>
+  </>;
 }
-export function MyEquipment(){const {equipment,save}=useContext(EquipmentContext),[editing,setEditing]=useState(false);return <section className="c-card c-my-equipment"><div><h2>My equipment</h2><button onClick={()=>setEditing(true)}>{equipment?'Edit':'Add'} →</button></div>{equipment?<><strong>{equipment.model||equipment.type}</strong><p>{equipment.type} · {equipment.capture}{equipment.light?' · Light':''}</p><button className="c-equipment-remove" onClick={()=>save(null)}>Remove equipment</button></>:<p>Save your camera for tailored photo ideas.</p>}{editing&&<EquipmentEditor onClose={()=>setEditing(false)}/>}</section>}
+function EquipmentEditor({onClose}:{onClose:()=>void}){
+ return <Modal label="My equipment" placement="bottom" motion onClose={onClose}>
+   <div className="c-dialog-heading"><h2>My equipment</h2><button onClick={onClose} aria-label="Close equipment">×</button></div>
+   <QuickEquipment editing onFinish={onClose}/>
+ </Modal>;
+}
+
+export function MyEquipment(){
+ const {equipment}=useContext(EquipmentContext);
+ const [editing,setEditing]=useState(false);
+ const exact=popularCameras.findIndex(camera=>camera.model===equipment?.model);
+ const index=exact>=0?exact:popularCameras.findIndex(camera=>camera.type===equipment?.type);
+ return <section className="c-card c-my-equipment">
+   <div><h2>My equipment</h2>
+     <button type="button" className="c-profile-gear-button" onClick={()=>setEditing(true)} aria-label={equipment?'Edit equipment':'Add equipment'}>
+       {equipment&&index>=0?<span className="c-profile-camera" aria-hidden="true" style={{backgroundPosition:(index%3)*50+'% '+Math.floor(index/3)*100+'%'}}/>:equipment?'Edit →':'Add →'}
+       {equipment&&<small>{equipment.model||equipment.type}</small>}
+     </button>
+   </div>
+   {!equipment&&<p>Save your camera for tailored photo ideas.</p>}
+   {editing&&<EquipmentEditor onClose={()=>setEditing(false)}/>}
+ </section>;
+}
 export function EquipmentAdvice(){
  const {equipment}=useContext(EquipmentContext),[editing,setEditing]=useState(false);
  const video=equipment?.capture==='Video';

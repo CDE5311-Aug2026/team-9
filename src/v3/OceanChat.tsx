@@ -2,7 +2,7 @@ import {useEffect,useRef,useState} from 'react';
 import {Modal} from './CompanionUI';
 import {Go} from './UI';
 export function FishCompanion(){
- return <svg viewBox="0 0 80 80" fill="none" aria-hidden="true"><g stroke="#172b35" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m28 51-4 16-7 2m28-17 6 14 7 2M24 37l-12 5-4-6m48 1 10-9 4 3"/><path d="m58 33 13-8-2 21-12-7" fill="#ff6a18"/><path d="M17 36c0-13 14-20 28-15 10 3 16 10 16 17s-10 17-24 17S17 45 17 36Z" fill="#009fe8"/><path d="m35 20 7-7 8 10" fill="#ff6a18"/><circle cx="29" cy="34" r="7" fill="#fffefa"/><circle cx="46" cy="34" r="7" fill="#fffefa"/><path d="M36 33h3m-17-2-4-2m35 2 6-3"/><path d="M29 33v3m17-3v3m-14 9q6 5 11-1"/><path d="m9 36-2-4m3 3 1-4"/></g></svg>;
+ return <img className="c-assistant-puffer" src="/v3/onboarding/fish-avatar.jpg" alt=""/>;
 }
 type Reply={text:string;action?:string;to?:string};
 type Message=Reply&{role:'user'|'assistant'};

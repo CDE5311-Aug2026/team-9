@@ -1,3 +1,5 @@
+import {InterestSummary} from './InterestSummary';
+import {WishlistButton} from './MarineWishlist';
 import {DestinationTile} from './DestinationTile';
 import {WorldwideSites} from './WorldwideSites';
 import {InterestPicker} from './InterestPicker';
@@ -30,7 +32,7 @@ function DiveRecommendations({area, preferences, onChoosePlace}: {area: AreaCont
   const topics=interests.length?interests:['Marine life'];
   return <>
     <div className="c-section-heading"><h2>{area.short}, your way</h2></div>
-    <div className="c-explore-preferences"><MonthDropdown options={months} value={months[month-1]} onChange={value=>update('month',String(months.indexOf(value)+1))}/><div className="c-interest-controls"><button className="c-interest-trigger" aria-haspopup="dialog" aria-expanded={editing} onClick={()=>setEditing(true)}><AIIcon/><span>{interests.length?'Your interests':'What would you love to see?'}</span><span aria-hidden="true">＋</span></button>{!!interests.length&&<div className="c-interest-tags">{interests.map(value=><button key={value} onClick={()=>applyInterests(interests.filter(v=>v!==value))} aria-label={'Remove '+value}>{value}<span aria-hidden="true">×</span></button>)}</div>}</div></div>
+    <div className="c-explore-preferences"><MonthDropdown options={months} value={months[month-1]} onChange={value=>update('month',String(months.indexOf(value)+1))}/><InterestSummary interests={interests} open={editing} onEdit={()=>setEditing(true)}/></div>
     <div className="c-dive-list" aria-label="Dive recommendations">{topics.map(interest=>{
       if(interest==='Whale sharks'||interest==='Turtles'){
         const id=interest==='Whale sharks'?5:1;
@@ -63,6 +65,7 @@ export function Explore({saved, area, setArea, preferences}: {saved: number[]; a
     <div className="c-explore-sticky"><header className="c-explore-heading"><h1 className="c-page-title">Explore</h1><button className="c-area-trigger" aria-label={'Change location, current location: '+area} aria-haspopup="dialog" aria-expanded={choosing} title={area} onClick={() => setChoosing(true)}><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" strokeWidth="1.7"/></svg><span>{worldwide?'Worldwide':region?.short ?? area}</span><svg className="c-chevron" aria-hidden="true" width="12" height="12" viewBox="0 0 20 20" fill="none"><path d="m5 7.5 5 5 5-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg></button></header>
     {<div className="c-tabs" role="tablist" aria-label="Explore categories">{exploreTabs.map((label, i) => <button id={'explore-tab-' + i} role="tab" aria-selected={tab === i} aria-controls="explore-content" key={label} onClick={() => changeTab(i)}>{label}</button>)}</div>}
     </div>
+    {tab===1&&<WishlistButton/>}
     {worldwide?<div id="explore-content" aria-label="Worldwide destinations"><WorldwideSites tab={tabKeys[tab] as 'sites'|'marine'|'experiences'} saved={saved} topics={preferences.topics??[]} onSelect={destination=>{setArea(destination.label);setScope(false);document.getElementById('v3-main')?.scrollTo(0,0);}}/></div>:region ? <div role="tabpanel" id="explore-content" aria-labelledby={'explore-tab-' + tab} className="c-explore-panel">
       <ExploreMap key={region.key+tab} area={region} tab={tab} saved={saved}/>
       {tab === 0 ? <DiveRecommendations key={region.key} area={region} preferences={preferences} onChoosePlace={()=>setChoosing(true)}/> : tab === 1 ? <MarineDiscovery area={region} saved={saved}/> : <ExperienceDiscovery area={region}/>}

@@ -1,3 +1,9 @@
+import {Navigate} from 'react-router-dom';
+import {LocalAccount} from './LocalIdentity';
+import type {Identity} from './LocalIdentity';
+import {MarineWishlist} from './MarineWishlist';
+import {ActivitySignup} from './ActivitySignup';
+import type {StudyRecord} from './StudyPhotos';
 import {ChallengeCheck} from './ChallengeCheck';
 import {FirstRun} from './FirstRun';
 import {usePhoneScale} from './usePhoneScale';
@@ -36,16 +42,15 @@ import {Tour,tourPages} from './Tour';
 import {OceanProfile} from './OceanProfile';
 export function V3App(){return <EquipmentProvider><V3Content/></EquipmentProvider>}
 function V3Content(){const phoneRef=usePhoneScale();
- const [onboardingDone,setOnboardingDone]=useState(()=>{try{
-   if(localStorage.getItem('divedex.v3.onboarding.done')==='true')return true;
-   if(localStorage.getItem('divedex.v3.onboarding.started')==='true')return false;
-   const returning=['preferences','savedIdeas','saved','tour.v1'].some(key=>localStorage.getItem('divedex.v3.'+key)!==null);
-   localStorage.setItem('divedex.v3.onboarding.'+(returning?'done':'started'),'true');return returning;
- }catch{return false}});
+ const [onboardingDone,setOnboardingDone]=useState(()=>read<boolean>('onboarding.done',false));
 const [showFrame,setShowFrame]=useState(()=>read<boolean>('previewFrame',true));const nav=useNavigate(),location=useLocation(),{pathname,search}=location,navigationType=useNavigationType(),page=(pathname==='/'?'home':pathname.replace(/^\/v3\/?/,''))||'home';const [saved,setSaved]=useState<number[]>(()=>read('saved',[])),[guest,setGuest]=useState(()=>read('guest',false)),[area,setArea]=useState(()=>{const stored=read<string>('area','Amed, Bali');return stored==='Bali, Indonesia'?'Amed, Bali':stored}),[video,setVideo]=useState(false),[selectedPhotos,setSelectedPhotos]=useState<number[]>([0,1,2,3,4]),[handled,setHandled]=useState<number[]>(()=>read('handled',[])),[pending,setPending]=useState<number[]>([]),[lastCount,setLastCount]=useState(0),[contributed,setContributed]=useState(()=>read('contributed',false)),[quiz,setQuiz]=useState('');
+ const [identity,setIdentity]=useState<Identity|null>(()=>read('identity',null));
+ const updateIdentity=(user:Identity|null)=>{localStorage.setItem('divedex.v3.identity',JSON.stringify(user));setIdentity(user);setGuest(!user);};
  const [challenge,setChallenge]=useState<DiveChallengeState|null>(()=>read('diveChallenge',null));
  useEffect(()=>{try{localStorage.setItem('divedex.v3.diveChallenge',JSON.stringify(challenge));}catch{/* Storage is optional. */}},[challenge]);
  const [reviewHandled,setReviewHandled]=useState<number[]>(()=>read('reviewHandled',[]));
+ const [studyRecords,setStudyRecords]=useState<StudyRecord[]>(()=>read('studyRecords',[]));
+ useEffect(()=>{try{localStorage.setItem('divedex.v3.studyRecords',JSON.stringify(studyRecords));}catch{/* Browser storage unavailable. */}},[studyRecords]);
  const mainRef=useRef<HTMLElement>(null),scrollPositions=useRef(new Map<string,number>());
  useLayoutEffect(()=>{
   const main=mainRef.current;if(!main)return;
@@ -71,25 +76,26 @@ const [showFrame,setShowFrame]=useState(()=>read<boolean>('previewFrame',true));
  const [removedIdea,setRemovedIdea]=useState<SavedIdea|null>(null);
  const [savedIdeas,setSavedIdeas]=useState<SavedIdea[]>(()=>normalizeIdeas(read('savedIdeas',[])));
  useEffect(()=>{try{localStorage.setItem('divedex.v3.homeArea',JSON.stringify(homeArea));localStorage.setItem('divedex.v3.stage',JSON.stringify(stage));localStorage.setItem('divedex.v3.preferences',JSON.stringify(preferences));localStorage.setItem('divedex.v3.savedIdeas',JSON.stringify(savedIdeas));}catch{/* Local storage is optional. */}},[stage,preferences,savedIdeas,homeArea]);
- useEffect(()=>{if(!onboardingDone&&page==='home')nav('/v3/welcome',{replace:true});},[onboardingDone,page,nav]);
  const finishOnboarding=(topics:string[]|null)=>{
    if(topics!==null)setPreferences(current=>({...current,topics,interests:topics.includes('Photography')||topics.includes('Macro photography')?['Underwater photography']:topics.length?['Marine life']:[]}));
    setOnboardingDone(true);
    try{localStorage.setItem('divedex.v3.onboarding.done','true');localStorage.removeItem('divedex.v3.onboarding.draft')}catch{/* Optional storage. */}
-   nav('/v3/explore?scope=world',{replace:true});
+   nav('/v3/home',{replace:true});
  };
  const settingsPages=['settings','account','location','privacy','contributions','notifications','help','about'];const mainPages=['home','explore','collection','profile'];const onboarding=['welcome','intro','signup','login','verify','invitation','try','first-result'];
  useDetailReveal(mainRef,pathname+search,/^(destination|learn|species|guide|experience)\//.test(page));
  let content;
- if(page==='welcome'||page==='intro')content=<FirstRun page={page} preferences={preferences} onFinish={finishOnboarding}/>;
+ const firstRunPages=['welcome','intro','intro-equipment','intro-feature-1','intro-feature-2','intro-feature-3','intro-feature-4'];
+ if(!onboardingDone&&!firstRunPages.includes(page)&&!onboarding.includes(page))return <Navigate to="/v3/welcome" replace/>;
+ if(firstRunPages.includes(page))content=<FirstRun page={page} preferences={preferences} onFinish={finishOnboarding} onGuest={()=>updateIdentity(null)}/>;
  else if(page==='home')content=<Home onSaveIdea={idea=>setSavedIdeas(values=>values.some(value=>ideaKey(value)===ideaKey(idea))?values:[...values,idea])} onRemoveIdea={idea=>{setRemovedIdea(idea);setSavedIdeas(values=>values.filter(v=>ideaKey(v)!==ideaKey(idea)))}} savedIdeas={savedIdeas} saved={saved} area={stage==='At the spot'?homeArea:area} setArea={value=>{setHomeArea(value);setArea(value)}} onBrowse={()=>{if(stage==='At the spot')setArea(homeArea)}} stage={stage} setStage={setStage} preferences={preferences} discovered={collectionIds(saved).length} challenge={challenge} onStartChallenge={id=>setChallenge({speciesId:id,place:stage==='At the spot'?homeArea:area,status:'active'})}/>;
  else if(page.startsWith('marine-topic/'))content=<MarineTopic topic={page.split('/')[1]}/>;
  else if(page==='preferences')content=<FirstRun page="preferences" preferences={preferences} onFinish={topics=>{if(topics!==null)setPreferences(current=>({...current,topics}));try{localStorage.removeItem('divedex.v3.onboarding.draft')}catch{/* Optional storage. */}nav('/v3/home',{replace:true})}}/>;
  else if(page.startsWith('destination/'))content=<Destination key={page} areaKey={page.split('/')[1]} saved={savedIdeas} onSave={idea=>setSavedIdeas(values=>values.some(v=>ideaKey(v)===ideaKey(idea))?values.filter(v=>ideaKey(v)!==ideaKey(idea)):[...values,idea])}/>;
  else if(page==='saved-ideas')content=<SavedIdeas saved={savedIdeas}/>;
- else if(page.startsWith('experience/'))content=<ExperienceDetail key={page} areaKey={page.split('/')[1]} kind={page.split('/')[2]} onContribute={()=>setContributed(true)}/>;
+ else if(page.startsWith('experience/'))content=<ExperienceDetail key={page} areaKey={page.split('/')[1]} kind={page.split('/')[2]} saved={saved} onContribute={record=>setStudyRecords(current=>[record,...current])}/>;
  else if(page.startsWith('learn/'))content=<Learning key={page} topic={page.split('/')[1]}/>;
- else if(page==='profile')content=<OceanProfile challenge={challenge}/>;
+ else if(page==='profile')content=<OceanProfile identity={identity} challenge={challenge}/>;
  else if(page==='collection')content=<Collection saved={saved} pendingReview={reviewIds.filter(id=>!reviewHandled.includes(id)).length}/>;
  else if(page==='collection-review')content=<CollectionReview handled={reviewHandled} onConfirm={(source,id)=>{setSaved(values=>[...new Set([...values,id])]);setReviewHandled(values=>[...new Set([...values,source])]);}}/>;
  else if(page==='explore')content=<Explore saved={saved} area={area} setArea={setArea} preferences={preferences}/>;
@@ -103,11 +109,16 @@ const [showFrame,setShowFrame]=useState(()=>read<boolean>('previewFrame',true));
  else if(page==='around')content=<><Back to="explore" label="Explore"/><h1>Around you</h1>{[1,2,3].map(i=><Go className="v-species-row" key={i} to={'guide/'+i}><img src={species[i].photo} alt=""/><strong>{species[i].name}</strong></Go>)}</>;
  else if(page==='study'||page==='contribute')content=<Study review={page==='contribute'} onContribute={()=>{setContributed(true);go('contribution-sent')}}/>;
  else if(page==='contribution-sent')content=<><Back to="explore"/><div className="v-centered"><span className="v-success">✓</span><h1>Contribution sent</h1><p>Thank you for helping ocean research.</p><Go className="v-button" to="contributions">View my contributions</Go></div></>;
- else if(page==='cleanup')content=<><Back to="explore" label="Explore"/><h1>Amed Shoreline Cleanup</h1><p>Amed Coast Volunteers</p><Panel><p>Beach cleanup</p><p>24 Oct 2026 · 08:00–10:00 WITA</p><p>Amed Beach, Bali</p></Panel><p>A morning of shoreline litter removal along Amed Beach. Collect and sort litter after an organizer-led safety briefing.</p><Panel><h2>Organizer requirements</h2><p>• Ages 18+ or accompanied by a guardian</p><p>• Able to walk on uneven sand</p><p>• Attend the safety briefing</p><p>• No dive certification needed for this beach cleanup</p></Panel><Panel><h2>What to bring</h2><p>Reusable gloves · Closed-toe shoes · Refillable water · Sun protection</p></Panel><Go className="v-button" to="explore">Back to Explore</Go></>;
+ else if(page==='cleanup')content=<><Back to="explore" label="Explore"/><h1>Amed Shoreline Cleanup</h1><p>Amed Coast Volunteers</p><Panel><p>Beach cleanup</p><p>24 Oct 2026 · 08:00–10:00 WITA</p><p>Amed Beach, Bali</p></Panel><p>A morning of shoreline litter removal along Amed Beach. Collect and sort litter after an organizer-led safety briefing.</p><Panel><h2>Organizer requirements</h2><p>• Ages 18+ or accompanied by a guardian</p><p>• Able to walk on uneven sand</p><p>• Attend the safety briefing</p><p>• No dive certification needed for this beach cleanup</p></Panel><Panel><h2>What to bring</h2><p>Reusable gloves · Closed-toe shoes · Refillable water · Sun protection</p></Panel><ActivitySignup activityId="amed.shore" title="Amed Shoreline Cleanup" region="Bali, Indonesia"/></>;
+ else if(page==='signup'||page==='login')content=<LocalAccount key={page} login={page==='login'} onSuccess={user=>{
+   updateIdentity(user);
+   if(pending.length){setSaved(values=>[...new Set([...values,...pending])]);setHandled(values=>[...new Set([...values,...pending])]);setLastCount(pending.length);setChallenge(current=>current?.status==='active'&&pending.includes(current.speciesId)?{...current,status:'complete'}:current);setPending([]);go('saved');}
+   else if(page==='signup'||!onboardingDone)go('intro-feature-1');else go('home');
+ }}/>;
  else if(onboarding.includes(page))content=<Onboarding key={page} page={page} pending={!!pending.length} onGuest={()=>{setGuest(true);go('try')}} onLogin={()=>{setGuest(false);if(pending.length){setSaved(s=>[...new Set([...s,...pending])]);setHandled(s=>[...new Set([...s,...pending])]);setChallenge(c=>c?.status==='active'&&pending.includes(c.speciesId)?{...c,status:'complete'}:c);setLastCount(pending.length);setPending([]);go('saved')}else go('home')}} onSave={()=>save([0])}/>;
  else if(page==='saved')content=<><div className="v-centered"><span className="v-success">✓</span><h1>{lastCount===1?'Sighting saved.':`${lastCount} observations saved`}</h1><p>Your ocean story is growing.</p>{challenge?.status==='complete'&&<Panel><h2>Congratulations!</h2><p>Reef finder · Quest complete</p><Go to="profile">View your achievement →</Go></Panel>}<Go className="v-button" to="collection">View collection</Go><Panel><h2>A little ocean quiz?</h2><p>See how much you remember.</p><Button onClick={()=>{setQuiz('');go('quiz')}}>Try a quick quiz</Button></Panel><Go className="v-back" to="results">Back to results</Go></div></>;
  else if(page==='quiz')content=<><Back to="saved" label="Done"/><h1>Ocean quiz</h1><h2>{quiz?quiz==='Whale shark'?'You remembered!':'Now you know.':'Remember this one?'}</h2><img className="v-hero" src={species[5].photo} alt={quiz?'Whale shark':'Marine animal to identify'}/>{quiz?<><h2>Whale shark</h2><p>{quiz==='Whale shark'?'That’s right.':'Try again next time.'}</p><Go className="v-button" to="collection">Done</Go></>:<>{['Whale shark','Blacktip reef shark','Nurse shark'].map(a=><Button secondary key={a} onClick={()=>setQuiz(a)}>{a}</Button>)}<Button secondary onClick={()=>setQuiz('reveal')}>Reveal name</Button></>}</>;
- else if(settingsPages.includes(page))content=<Profile onReplay={startTour} key={page} page={page} area={area} guest={guest} contributed={contributed} onWithdraw={()=>setContributed(false)} onSignOut={()=>{setGuest(true);go('welcome')}}/>;
+ else if(settingsPages.includes(page))content=<Profile identity={identity} studyRecords={studyRecords} onRemoveRecord={id=>setStudyRecords(current=>current.filter(record=>record.id!==id))} onReplay={startTour} key={page} page={page} area={area} guest={guest} contributed={contributed} onWithdraw={()=>setContributed(false)} onSignOut={()=>{updateIdentity(null);go('welcome')}}/>;
  else content=<><h1>Let’s get back to the ocean.</h1><Go className="v-button" to="home">Home</Go></>;
- return <><div className="c-preview-toolbar"><button type="button" role="switch" aria-checked={showFrame} onClick={()=>{const next=!showFrame;setShowFrame(next);try{localStorage.setItem('divedex.v3.previewFrame',JSON.stringify(next));}catch{/* Preview preferences are optional. */}}}><svg aria-hidden="true" width="16" height="18" viewBox="0 0 16 22" fill="none"><rect x="2" y="1" width="12" height="20" rx="3" stroke="currentColor" strokeWidth="1.5"/><path d="M6 18h4" stroke="currentColor" strokeLinecap="round"/></svg><span>Phone frame</span><span className="c-preview-switch" aria-hidden="true"><i/></span></button><Go className="c-preview-onboarding" to="welcome">Try onboarding</Go></div><div ref={phoneRef} className={'v2 v3 '+(showFrame?'c-device-framed ':'c-device-bare ')+(page==='home'?'v-home':'')}><Status/><main ref={mainRef} className={'v-content '+(page==='analysis'?'c-analysis':page==='identify'?'v-picker c-recognition':page==='results'?'c-recognition':page==='collection'?'v-collection':'')} id="v3-main">{content}</main>{(mainPages.includes(page)||settingsPages.includes(page))?<Nav page={settingsPages.includes(page)?'profile':page}/>:<div className="v-indicator"><i/></div>}{removedIdea&&<div className="c-idea-undo" role="status"><span>Saved idea deleted</span><button onClick={()=>{setSavedIdeas(values=>values.some(v=>ideaKey(v)===ideaKey(removedIdea))?values:[...values,removedIdea]);setRemovedIdea(null)}}>Undo</button><button aria-label="Dismiss deletion message" onClick={()=>setRemovedIdea(null)}>×</button></div>}{tour!==null&&<Tour step={tour} onClose={closeTour} onNext={()=>{if(tour===3)closeTour();else{setTour(tour+1);go(tourPages[tour+1])}}}/>}</div></>;
+ return <><div className="c-preview-toolbar"><button type="button" role="switch" aria-checked={showFrame} onClick={()=>{const next=!showFrame;setShowFrame(next);try{localStorage.setItem('divedex.v3.previewFrame',JSON.stringify(next));}catch{/* Preview preferences are optional. */}}}><svg aria-hidden="true" width="16" height="18" viewBox="0 0 16 22" fill="none"><rect x="2" y="1" width="12" height="20" rx="3" stroke="currentColor" strokeWidth="1.5"/><path d="M6 18h4" stroke="currentColor" strokeLinecap="round"/></svg><span>Phone frame</span><span className="c-preview-switch" aria-hidden="true"><i/></span></button><Go className="c-preview-onboarding" to="welcome">Try onboarding</Go></div><div ref={phoneRef} className={'v2 v3 '+(showFrame?'c-device-framed ':'c-device-bare ')+(page==='home'?'v-home':'')}><Status/><main ref={mainRef} className={'v-content '+(page==='analysis'?'c-analysis':page==='identify'?'v-picker c-recognition':page==='results'?'c-recognition':page==='collection'?'v-collection':'')} id="v3-main"><MarineWishlist>{content}</MarineWishlist></main>{(mainPages.includes(page)||settingsPages.includes(page))?<Nav page={settingsPages.includes(page)?'profile':page}/>:<div className="v-indicator"><i/></div>}{removedIdea&&<div className="c-idea-undo" role="status"><span>Saved idea deleted</span><button onClick={()=>{setSavedIdeas(values=>values.some(v=>ideaKey(v)===ideaKey(removedIdea))?values:[...values,removedIdea]);setRemovedIdea(null)}}>Undo</button><button aria-label="Dismiss deletion message" onClick={()=>setRemovedIdea(null)}>×</button></div>}{tour!==null&&<Tour step={tour} onClose={closeTour} onNext={()=>{if(tour===3)closeTour();else{setTour(tour+1);go(tourPages[tour+1])}}}/>}</div></>;
 }

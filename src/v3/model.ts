@@ -32,5 +32,5 @@ species[3].photo=v3['427:2893'].imgRectangle1;
 species[0].photo=v3['427:2893'].imgRectangle2;
 
 // Existing collection entries, including the whale shark in the dive log.
-export const initialCollectionIds = [4, 3, 0, 1, 5, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
+export const initialCollectionIds = [4, 3, 0, 1, 2, 5, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
 export function collectionIds(saved: number[]) {return [...new Set([...initialCollectionIds, ...saved])].filter(id => !!species[id]);}

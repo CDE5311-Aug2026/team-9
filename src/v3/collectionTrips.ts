@@ -4,6 +4,7 @@ export type CollectionTrip={id:string;name:string;short:string;month:string;date
 export function collectionTrips(saved:number[]):CollectionTrip[]{
  const trips:CollectionTrip[]=[
   {id:'bali-oct',name:'Bali, Indonesia',short:'Bali',month:'Oct 2026',dates:'7–10 Oct 2026',point:[-8.337,115.660],ids:[4,3,0,8,9,10,12,13,16]},
+  {id:'raja-aug',name:'Raja Ampat, Indonesia',short:'Raja Ampat',month:'Aug 2026',dates:'8–11 Aug 2026',point:[-.423,130.82],ids:[2]},
   {id:'philippines-jun',name:'Cebu, Philippines',short:'Cebu',month:'Jun 2026',dates:'12–16 Jun 2026',point:[9.46,123.38],ids:[1,5,11,14,15,17]},
  ];
  const known=new Set(trips.flatMap(t=>t.ids));const extra=collectionIds(saved).filter(id=>!known.has(id));

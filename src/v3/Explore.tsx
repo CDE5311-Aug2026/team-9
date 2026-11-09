@@ -1,7 +1,7 @@
 import {useSearchParams} from 'react-router-dom';
 import {collectionTrips} from './collectionTrips';
 import {useState} from 'react';
-import {QuickSpeciesAI,BlueTangKnowledge,SpeciesCuriosity} from './SpeciesKnowledge';
+import {BlueTangKnowledge,SpeciesCuriosity} from './SpeciesKnowledge';
 import {specimenPhotoCredits} from './specimenPhotoCredits';
 import {speciesQuickFacts} from './speciesQuickFacts';
 import {Back,Button,Go,Panel} from './UI';
@@ -17,12 +17,10 @@ export function Species({id,guide=false,saved=[]}:{id:number;guide?:boolean;save
   <article className="c-species-quick">
    <img className="c-species-photo" src={s.photo} alt={s.name}/>
    <header className="c-species-name"><h1>{s.name}</h1><i>{s.latin}</i><span className={'c-species-status'+(collected?' collected':'')}><span aria-hidden="true"/>{collected?'In your collection':'Not collected yet'}</span></header>
-   {guide&&<section className="c-species-cues"><h2>How to spot it</h2><ul>{facts.cues.map((cue,index)=><li key={cue}><span aria-hidden="true">{String(index+1).padStart(2,'0')}</span>{cue}</li>)}</ul></section>}
    <section className="c-species-fact"><h2>Fun fact</h2><p>{facts.fact}</p></section>
-   {guide&&<section className="c-species-habitat"><h2>Where to look</h2><p>{facts.habitat}</p></section>}
    <p className="c-species-reminder">{facts.reminder}</p>
    <details className="c-species-source"><summary>Read the source</summary><a href={facts.source} target="_blank" rel="noreferrer">Species reference ↗</a>{credit && <p>Photo: <a href={credit.source} target="_blank" rel="noreferrer">{credit.title}</a> · {credit.author} · <a href={credit.licenseUrl} target="_blank" rel="noreferrer">{credit.license}</a>. Display cropped to fit.</p>}</details>
-   {guide?<QuickSpeciesAI key={validId} name={s.name} answer={facts.fact} source={facts.source}/>:validId===4?<BlueTangKnowledge/>:<SpeciesCuriosity key={validId} name={s.name} cues={facts.cues} habitat={facts.habitat} reminder={facts.reminder} fact={facts.fact} source={facts.source}/>}
+   {validId===4?<BlueTangKnowledge/>:<SpeciesCuriosity key={validId} name={s.name} cues={facts.cues} habitat={facts.habitat} reminder={facts.reminder} fact={facts.fact} source={facts.source}/>}
    {!guide && collected && <section className="c-species-observations"><h2>Your observations</h2><dl className="c-observation-table">
     <div><dt>Trip dates</dt><dd>{trip && trip.id!=='unassigned'?trip.dates:'Not recorded'}</dd></div>
     <div><dt>Location</dt><dd>{trip && trip.id!=='unassigned'?trip.name:'Not recorded'}</dd></div>
