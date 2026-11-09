@@ -971,3 +971,12 @@
 .c-wishlist-tile-title>svg{color:#0075a9}
 .v3 .c-dialog-close{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;flex:none;gap:5px;min-width:44px;min-height:44px;padding:0;line-height:1}
 .c-dialog-close svg{display:block;flex:none}
+.c-ocean-quiz,.c-quiz-choices,.c-quiz-complete{display:grid;gap:12px}
+.c-ocean-quiz>.v-hero{max-height:230px;object-fit:cover}
+.c-quiz-result.is-correct{background:#dbefea}
+@media(prefers-reduced-motion:no-preference){
+.c-quiz-result.is-correct h2,.c-quiz-complete>span{animation:quiz-pop .42s ease-out}
+.c-quiz-result.is-missed{animation:quiz-shake .28s ease-in-out}
+}
+@keyframes quiz-pop{0%{opacity:.35;transform:translateY(5px) scale(.94)}65%{transform:scale(1.035)}100%{opacity:1;transform:none}}
+@keyframes quiz-shake{25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
