@@ -1,0 +1,49 @@
+.qm-result {
+  display:grid;
+  justify-items:center;
+  gap:18px;
+  padding:24px 18px;
+  text-align:center;
+  border-radius:22px;
+  background:#fffdf6;
+}
+.qm-stage {
+  position:relative;
+  display:grid;
+  place-items:center;
+  width:100%;
+  height:clamp(180px,29dvh,248px);
+  overflow:hidden;
+  isolation:isolate;
+}
+.qm-medal {
+  position:relative;
+  display:grid;
+  place-items:center;
+  width:min(42%,128px);
+  aspect-ratio:1;
+}
+.qm-medal img { grid-area:1/1; display:block; width:100%; }
+.qm-medal .qm-icon { width:55%; }
+.qm-caption p { margin-top:6px; font-variant-numeric:tabular-nums; }
+.qm-result .c-primary { width:100%; }
+.qm-burst { position:absolute; inset:0; display:grid; place-items:center; pointer-events:none; }
+.qm-burst i { grid-area:1/1; width:5px; height:15px; border-radius:2px; background:#009fe8; opacity:0; }
+.qm-burst i:nth-child(even) { width:7px; height:7px; border-radius:50%; background:#ff5900; }
+@media (prefers-reduced-motion:no-preference) {
+  .qm-reveal .qm-medal { animation:qm-pop .6s cubic-bezier(.18,.77,.3,1) both; }
+  .qm-reveal .qm-caption { animation:qm-caption .28s .3s backwards; }
+  .qm-reveal .qm-burst i { animation:qm-burst .58s .13s both; }
+}
+@keyframes qm-pop {
+  0% { opacity:0; transform:scale(.58) rotate(-8deg); }
+  55% { opacity:1; transform:scale(1.10) rotate(2deg); }
+  80% { transform:scale(.98); }
+  100% { transform:none; }
+}
+@keyframes qm-burst {
+  0% { opacity:0; transform:translateY(-36px) scale(.5); }
+  30% { opacity:1; }
+  100% { opacity:0; transform:translateY(-106px) scale(.85); }
+}
+@keyframes qm-caption { from { opacity:0; transform:translateY(4px); } }

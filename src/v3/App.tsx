@@ -50,6 +50,12 @@ const [showFrame,setShowFrame]=useState(()=>read<boolean>('previewFrame',true));
  const updateIdentity=(user:Identity|null)=>{localStorage.setItem('divedex.v3.identity',JSON.stringify(user));setIdentity(user);setGuest(!user);};
  const [challenge,setChallenge]=useState<DiveChallengeState|null>(()=>read('diveChallenge',null));
  useEffect(()=>{try{localStorage.setItem('divedex.v3.diveChallenge',JSON.stringify(challenge));}catch{/* Storage is optional. */}},[challenge]);
+ const [reefFinderPlace,setReefFinderPlace]=useState(()=>read<string>('reefFinderPlace',''));
+ useEffect(()=>{
+   if(challenge?.status!=='complete'||reefFinderPlace)return;
+   setReefFinderPlace(challenge.place);
+   try{localStorage.setItem('divedex.v3.reefFinderPlace',JSON.stringify(challenge.place));}catch{/* Keep the award for this session. */}
+ },[challenge,reefFinderPlace]);
  const [reviewHandled,setReviewHandled]=useState<number[]>(()=>read('reviewHandled',[]));
  const [studyRecords,setStudyRecords]=useState<StudyRecord[]>(()=>read('studyRecords',[]));
  useEffect(()=>{try{localStorage.setItem('divedex.v3.studyRecords',JSON.stringify(studyRecords));}catch{/* Browser storage unavailable. */}},[studyRecords]);
@@ -97,7 +103,7 @@ const [showFrame,setShowFrame]=useState(()=>read<boolean>('previewFrame',true));
  else if(page==='saved-ideas')content=<SavedIdeas saved={savedIdeas}/>;
  else if(page.startsWith('experience/'))content=<ExperienceDetail key={page} areaKey={page.split('/')[1]} kind={page.split('/')[2]} saved={saved} onContribute={record=>setStudyRecords(current=>[record,...current])}/>;
  else if(page.startsWith('learn/'))content=<Learning key={page} topic={page.split('/')[1]}/>;
- else if(page==='profile')content=<OceanProfile quiz={quiz} identity={identity} challenge={challenge}/>;
+ else if(page==='profile')content=<OceanProfile quiz={quiz} identity={identity} reefFinderPlace={reefFinderPlace} saved={saved} hasContribution={contributed || studyRecords.length>0}/>;
  else if(page==='collection')content=<Collection saved={saved} pendingReview={reviewIds.filter(id=>!reviewHandled.includes(id)).length}/>;
  else if(page==='collection-review')content=<CollectionReview handled={reviewHandled} onConfirm={(source,id)=>{setSaved(values=>[...new Set([...values,id])]);setReviewHandled(values=>[...new Set([...values,source])]);}}/>;
  else if(page==='explore')content=<Explore saved={saved} area={area} setArea={setArea} preferences={preferences}/>;

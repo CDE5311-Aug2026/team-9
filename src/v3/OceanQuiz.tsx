@@ -1,5 +1,6 @@
 import {useState} from 'react';
-import {Back,Go} from './UI';
+import {Back} from './UI';
+import {QuizMedal} from './QuizMedal';
 import {read,species} from './model';
 
 const questions = [
@@ -35,7 +36,7 @@ export type QuizState=ReturnType<typeof useOceanQuiz>;
 export function OceanQuiz({quiz}:{quiz:QuizState}){
   const [result,setResult]=useState<{question:typeof questions[number];choice:number}|null>(null);
   const question=result?.question??quiz.remaining[0];
-  if(!question)return <><Back to="profile"/><section className="c-card c-quiz-complete"><span aria-hidden="true">✓</span><h1>Ocean quiz complete</h1><p>You finished all {quiz.total} questions · {quiz.correct} correct.</p><Go className="c-primary" to="collection">Explore your Collection</Go></section></>;
+  if(!question)return <><Back to="profile"/><QuizMedal correct={quiz.correct} total={quiz.total}/></>;
   const right=result?.choice===question.answer;
   const choose=(choice:number)=>{
     if(result)return;

@@ -1,0 +1,19 @@
+.award-blue { --award-color:#009fe8; }
+.award-orange { --award-color:#ff5900; }
+.profile-award .award-mark { isolation:isolate; color:#151719; }
+.award-mark::before {
+  content:'';
+  position:absolute;
+  inset:2px;
+  z-index:-1;
+  background:var(--award-color);
+}
+.award-focus::before { border-radius:18px; }
+.award-diamond::before { inset:8px; border-radius:12px; transform:rotate(45deg); }
+.award-shield::before { clip-path:polygon(8% 9%,50% 2%,92% 9%,90% 60%,78% 78%,50% 98%,22% 78%,10% 60%); }
+.award-seal::before { mask:url('/v3/9d1ae8fc-8c2a-4704-af85-52ea53a3c5dc.svg') center/contain no-repeat; }
+.profile-award.locked .award-mark::before { background:#e4e1db; }
+.profile-award.locked .award-mark { color:#676865; }
+.profile-award.locked .award-mark img { opacity:.55; }
+.award-state { display:block; font-style:normal; }
+.profile-award.earned .award-state { display:none; }
