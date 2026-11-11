@@ -11,14 +11,14 @@ const cards = [
 
 export function FeatureIntro({step,onFinish}:{step:number;onFinish:()=>void}) {
   const card=cards[step];
-  return <section className="c-first-run c-feature-intro">
+  return <section key={step} className="c-first-run c-feature-intro">
     <div className="c-first-top"><Back to={step?'intro-feature-'+step:'welcome'} force/><button onClick={onFinish}>Skip</button></div>
     <div className={'c-feature-stage stage-'+step} aria-hidden="true">
       <div className="c-feature-composition">
-      {step===0&&<figure className="c-feature-print"><img src="/v3/destinations/amed-coast-user.png" alt=""/><figcaption><small>Dive sites</small><strong>Amed coast</strong></figcaption></figure>}
-      {step===1&&<figure className="c-feature-print"><div className="c-feature-scan"><img src={species[0].photo} alt=""/><i/></div><figcaption><small><AIIcon/> Suggested match</small><strong>{species[0].name}</strong></figcaption></figure>}
+      {step===0&&<figure className="c-feature-print"><div className="c-intro-coast"><img src="/v3/destinations/amed-coast-user.png" alt=""/><span className="c-intro-pin"/></div><figcaption><small>Dive sites</small><strong>Amed coast</strong></figcaption></figure>}
+      {step===1&&<figure className="c-feature-print"><div className="c-feature-scan"><img src={species[0].photo} alt=""/><span className="c-intro-focus"/><span className="c-intro-sweep"/></div><figcaption><small><AIIcon/> Suggested match</small><strong>{species[0].name}</strong></figcaption></figure>}
       {step===2&&<div className="c-feature-album">{[3,4].map(id=><figure key={id}><img src={species[id].photo} alt=""/><figcaption>{species[id].name}</figcaption></figure>)}</div>}
-      {step===3&&<figure className="c-feature-print"><img src={species[2].photo} alt=""/><figcaption><small>Research contribution</small><strong>Manta Photo Study</strong></figcaption></figure>}
+      {step===3&&<figure className="c-feature-print"><div className="c-intro-study"><img src={species[2].photo} alt=""/></div><figcaption><small>Research contribution</small><strong>Manta Photo Study</strong></figcaption></figure>}
       <div className="c-feature-character" style={{backgroundPosition:['50% 0%','100% 0%','center','100% 100%'][step]}}/>
       </div>
 
